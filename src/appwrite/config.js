@@ -28,7 +28,7 @@ export class Service {
       );
     } catch (error) {
       console.log("Appwrite service :: getPost() :: ", error);
-      return false;
+      return false ;
     }
   }
 
@@ -69,6 +69,7 @@ export class Service {
 
   //update a blog post
   async updatePost({ slug, title, content, featuredImage, status }) {
+    console.log("Updated Queued",{slug,title,content,featuredImage,status})
     try {
       return await this.databases.updateDocument(
         conf.appwrite_DatabaseId,
@@ -88,7 +89,7 @@ export class Service {
   }
 
   //delete a blog post
-  async deletePost({ slug }) {
+  async deletePost( slug ) {
     try {
       await this.databases.deleteDocument(
         conf.appwrite_DatabaseId,
@@ -104,6 +105,7 @@ export class Service {
 
   //Storage service for storing images
   //upload featuredImage
+  
   async uploadFile(file) {
     try {
       return await this.bucket.createFile(
@@ -133,5 +135,5 @@ export class Service {
   }
 }
 
-const service = new Service();
-export default service;
+const appwriteService = new Service();
+export default appwriteService;

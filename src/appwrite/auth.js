@@ -14,30 +14,34 @@ export class AuthService {
   }
   
   //create a new account
-  async createAccount({ email, password, name }) {
+  async createAccount({ email, password, username }) {
+    
+    console.log("signbakend",email,password,username)
     try {
       const userAccount = await this.account.create(
         ID.unique(),        // generate unique id for user
         email,
         password,
-        name
+        username
       );
       //if new account is created , login
       if (userAccount) {
         return this.login(email, password);
       } else {
-        return userAccount;
+        return false ;
       }
     } catch (error) {
-      throw error;
+      console.error("Appwrite service :: createAccount() :: ", error);
+      throw error
     }
   }
 
   // log into account
-  async login({ email, password }) {
+  async login(email, password) {
     try {
       return await this.account.createEmailSession(email, password);
     } catch (error) {
+      console.error("Appwrite service :: login() :: ", error);
       throw error;
     }
   }
@@ -47,7 +51,8 @@ export class AuthService {
     try {
       return await this.account.get();
     } catch (error) {
-      console.log("Appwrite service :: getCurrentUser() :: ", error);
+      console.error("Appwrite service :: getCurrentUser() :: ", error);
+      return false ;
     }
   }
 
@@ -56,10 +61,12 @@ export class AuthService {
     try {
       await this.account.deleteSessions();
     } catch (error) {
-      console.log("Appwrite service :: logout() :: ", error);
+      console.error("Appwrite service :: logout() :: ", error);
+      throw error ;
     }
   }
 }
+
 
 const authService = new AuthService();
 

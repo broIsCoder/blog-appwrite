@@ -1,0 +1,245 @@
+import { useForm } from 'react-hook-form';   //Using hookForm to reduce no.of states
+import React, { useState, useEffect } from 'react';
+import Button from '../Button';
+import Input from '../Input';
+import PostEditor from '../PostEditor';
+import Select from '../Select';
+import appwriteService from '../../appwrite/config';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import Container from '../container/Container';
+import Loading from '../Loading';
+import { showAlert } from '../../store/alertSlice'
+
+// This component serves fo{r both adding new posts and updating existing ones.
+// If `post` is provided, it means an existing post is being updated.
+// If `post` is not provided, it indicates a new post is being added.
+
+const PostForm = ({ post }) => {
+    const dispatch = useDispatch();
+    const [previewImage, setPreviewImage] = useState(null);
+    const [loading, setloading] = useState(true);
+    const navigate = useNavigate();
+    const userData = useSelector((state) => state.auth.userData);
+
+    // Using the useForm hook to handle form state and validation.
+    const { register, handleSubmit, setValue, watch, control, formState: { errors }, } = useForm();
+
+    const submit = async (data) => {
+
+        try {
+            setloading(true);
+            // If `post` exists, update the existing post.
+            if (post) {
+                dispatch(showAlert({
+                    message: "Updating Post",
+                    type: "loading"
+                }))
+                const file = data.image[0] ? await appwriteService.uploadFile(data.image[0]) : null;     // upload new image with unique id
+
+                if (file) {
+                    await appwriteService.deleteFile(post.featuredImage);      // delete old image of unique id
+                }
+
+                const dbPost = await appwriteService.updatePost({         // update old `post` in database
+                    slug: post.$id,
+                    ...data,
+                    featuredImage: file ? file.$id : undefined       // updating `$id` to link to new image
+                });
+
+                if (dbPost) {
+                    setloading(false);
+                    dispatch(showAlert({
+                        message: "Post Updated",
+                        type: "success"
+                    }));
+                    navigate(`/post/${dbPost.$id}`);          // go to updated post , if updated to database
+                } else {
+                    setloading(false);
+                    dispatch(showAlert({
+                        message: "Failed to Update Post",
+                        type: "warning"
+                    }));
+                };
+            }
+            // If `post` doesn't exist, create a new post.
+            else {
+                dispatch(showAlert({
+                    message: "Adding Post",
+                    type: "loading"
+                }))
+                const file = await appwriteService.uploadFile(data.image[0]);         // upload image with unique id
+
+                if (file) {
+                    data.featuredImage = file.$id;          // adding `$id` to link to image
+                    const dbPost = await appwriteService.createPost({ ...data, userId: userData.$id });       // upload new `post` in database    
+
+                    if (dbPost) {
+                        setloading(false);
+                        dispatch(showAlert({
+                            message: "New Post Added",
+                            type: "success"
+                        }));
+                        navigate(`/post/${dbPost.$id}`)       // go to newly added post , if added to database
+                    } else {
+                        setloading(false);
+                        dispatch(showAlert({
+                            message: "Failed to Add New Post",
+                            type: "error"
+                        }));
+                    }
+                }
+            }
+            setloading(false)
+        } catch (error) {
+            setloading(false)
+            dispatch(showAlert({
+                message: error.message,
+                type: "error"
+            }));
+        }
+    };
+
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    // Function to format title into a slug
+    const slugFormat = ((value) => {
+        if (value && typeof value === 'string') {
+            return value.trim().toLocaleLowerCase().replace(/[^a-zA-Z\d\s]+/g, '-').replace(/\s/g, "-");      //replace ' ' with '-'
+        }
+    });
+
+    useEffect(() => {
+        if (post) {
+            setValue("title", post.title);
+            setValue("slug", post.$id);
+            setValue("content", post.content);
+            setValue("status", post.status);
+            setValue("image", post.featuredImage);
+        }
+        const hideLaggyAnimation = () => {
+            const id = setTimeout(() => {
+                setloading(false);
+            }, 1500);
+            return id;
+        };
+        const timeoutId = hideLaggyAnimation();
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, [post]);
+
+
+    // OPTIONAL CODE FOR setting value of slug when change in title
+
+    // useEffect(() => {
+    //     // Runs every time there is changes in the hookForm's registered value ,
+    //     watch((value, { name }) => {
+    //         // if "title" field was changed, update the "slug" field accordingly.
+    //         if (name === 'title') {
+    //             setValue("slug", slugFormat(value.title), { shouldValidate: true });
+    //         }
+    //     });
+    // }, [watch, setValue]); // Re-run the effect when `watch`, `slug`, or `setValue` changes. // not neccessary i think
+
+    return (
+        <Container className="relative">
+            {loading &&
+                <div className='absolute w-full h-full z-[99] bg-black opacity-80'>
+                    <Loading />
+                </div>
+            }
+            <form onSubmit={handleSubmit(submit)} className="flex flex-col gap-2 sm:flex-row p-2">
+                <div className='flex flex-col gap-2 justify-between w-full sm:w-2/3 bg-green-380'>
+                    {post && <p className='bg-yellow-500 p-2 rounded-xl text-black font-bold'>Warning ! Do Not Edit Title : It will affect id of post</p>}
+                    <div className='flex gap-2 flex-col ss:flex-row'>
+                        <Input
+                            type="text"
+                            placeholder="Title"
+                            defaultvalues={post?.title}
+                            {...register("title", { required: true })}
+                            onChange={
+                                (e) => {
+                                    setValue("slug", slugFormat(e.target.value))
+                                }
+                            }
+                        />
+                        <Input
+                            readOnly={true}
+                            type="text"
+                            placeholder="Slug"
+                            defaultvalues={post?.slug}
+                            {...register("slug", { required: true })}
+                        />
+                    </div>
+
+                    <PostEditor
+                        name="content"
+                        defaultvalues={post?.content}
+                        control={control}
+                    />
+                </div>
+
+                <div className=' flex sm:flex-col flex-col gap-2 w-full sm:w-1/3 h-full justify-end items-end'>
+                    <div className='bg-black w-full flex flex-col gap-2'>
+                        {
+                            post ?
+                                (
+                                    <img src={previewImage || appwriteService.getFilePreview(post?.featuredImage)} className='min-h-[380px] max-h-[380px] ' alt="Preview" style={{ objectFit: 'contain', objectPosition: "center" }} />
+                                )
+
+                                :
+
+                                previewImage ?
+                                    (
+                                        <img src={previewImage} alt="Preview" className=' min-h-[380px] max-h-[380px] ' style={{ objectFit: 'contain', objectPosition: "center" }} />
+
+                                    ) :
+                                    (
+                                        <p className='text-xl font-bold min-h-[380px] max-h-[380px] flex justify-center items-center'>Choose an image</p>
+
+                                    )
+                        }
+                    </div>
+
+
+                    <div className='flex items-center justify-center flex-col w-full gap-2'>
+                        <Select
+                            options={["active", "inactive"]}
+                            defaultvalues={post?.status || ""}
+                            {...register("status", { required: true })}
+                        />
+                        <Input
+                            type="file"
+                            {...register("image", { required: !post })}
+                            defaultvaluess={post?.featuredImage}
+                            accept="image/png, image/jpeg, image/jpg"
+                            placeholder="Choose"
+                            className="w-full p-1.5 text-white border border-gray-300 rounded-lg"
+                            onChange={(e) => {
+                                handleFileChange(e);
+                            }}
+                        />
+                        <Button type='submit' classname={`bg-blue-500 p-2`}  >
+                            {post ? "Update" : "Add as New"}
+                        </Button>
+
+                    </div>
+                </div>
+            </form>
+        </Container>
+    );
+};
+
+export default PostForm;
