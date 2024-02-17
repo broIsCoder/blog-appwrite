@@ -12,7 +12,8 @@ import { showAlert,hideAlert } from '../store/alertSlice';
 const Signup = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
+    authService.dispatch = dispatch ;
+    
     const { register, handleSubmit } = useForm();     // used to register and submit input data
     const userNameRef = useRef(null);
     const emailRef = useRef(null);

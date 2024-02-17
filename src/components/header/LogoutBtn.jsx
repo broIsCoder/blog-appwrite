@@ -8,6 +8,7 @@ import { stopLoading,startLoading } from '../../store/authSlice'
 
 const LogoutBtn = ({classname = 'rounded-xl'}) => {
     const dispatch = useDispatch();
+    authService.dispatch = dispatch ;
 
     const logoutHandler = () => {
         dispatch(startLoading())
@@ -22,7 +23,7 @@ const LogoutBtn = ({classname = 'rounded-xl'}) => {
     }
     return (
         <Button
-            classname='hover:bg-red-600 ${classname}'
+            classname={`hover:bg-red-600 ${classname}`}
             onClick={logoutHandler}>
             Log Out
         </Button>

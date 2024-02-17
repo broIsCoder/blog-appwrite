@@ -19,7 +19,7 @@ const InfoAlert = ({ show }) => {
 
     return (
         <div className={`
-            bg-blue-700 text-white
+            bg-blue-500 text-white
             p-3 font-bold w-full ss:w-auto fixed top-0 right-0 z-[999]
             duration-300 flex gap-3 justify-between items-start  ${show ? '' : 'transform -translate-y-[100%] opacity-0 gap-1'}
             `}>

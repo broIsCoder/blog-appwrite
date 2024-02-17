@@ -6,10 +6,10 @@ import parse from 'html-react-parser'
 import { useDispatch, useSelector } from 'react-redux'
 import { showAlert } from '../store/alertSlice'
 
-// using html-react-parser for creatingElement html element in react
 const Post = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  appwriteServcie.dispatch = dispatch ;
   const [loading, setloading] = useState(false);
 
   const [post, setpost] = useState(null);
@@ -72,6 +72,7 @@ const Post = () => {
       <div className='sm:h-full h-[450px] sm:w-1/2  w-full'>
         <div className="relative w-full h-full bg-black duration-200 rounded-xl object-cover">
           <div className={`status ${post?.status === "active" ? 'bg-green-400':"bg-red-600"} h-[30px] w-[30px] border-black border-[5px] rounded-full absolute top-1 right-1 z-[99]`}></div>
+          
           <img src={appwriteServcie.getFilePreview(post.featuredImage)} alt={post.title} className='relative h-full w-full object-scale-down' />
           {isAuthor && (
             <div className='bottom-1 absolute right-1 flex gap-1'>
@@ -86,6 +87,7 @@ const Post = () => {
       <div className='sm:h-full h-full sm:w-1/2 w-full overflow-y-auto p-3 bg-white rounded-xl flex flex-col'>
   <h1 className='text-3xl font-bold mb-6 text-black'>{post.title}</h1>
   <div className='text-black break-words'>
+  {/* using html-react-parser for creatingElement html element in react */}
     {parse(post.content)}
   </div>
 </div>

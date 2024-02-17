@@ -9,6 +9,7 @@ import { showAlert } from './store/alertSlice';
 function App() {
   const loading = useSelector((state) => state.auth.loading);
   const dispatch = useDispatch();
+  authService.dispatch = dispatch ;
   const show = useSelector((state) => state.alert.show);
   const infoShow = useSelector((state) => state.infoAlert.show);
 

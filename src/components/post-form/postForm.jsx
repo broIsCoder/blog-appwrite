@@ -163,90 +163,94 @@ const PostForm = ({ post }) => {
     // }, [watch, setValue]); // Re-run the effect when `watch`, `slug`, or `setValue` changes. // not neccessary i think
 
     return (
-        <Container className="relative">
-            {loading &&
-                <div className='absolute w-full h-full z-[99] bg-black opacity-80'>
-                    <Loading />
-                </div>
-            }
-            <form onSubmit={handleSubmit(submit)} className="flex flex-col gap-2 sm:flex-row p-2">
-                <div className='flex flex-col gap-2 justify-between w-full sm:w-2/3 bg-green-380'>
-                    {post && <p className='bg-yellow-500 p-2 rounded-xl text-black font-bold'>Warning ! Do Not Edit Title : It will affect id of post</p>}
-                    <div className='flex gap-2 flex-col ss:flex-row'>
-                        <Input
-                            type="text"
-                            placeholder="Title"
-                            defaultvalues={post?.title}
-                            {...register("title", { required: true })}
-                            onChange={
-                                (e) => {
-                                    setValue("slug", slugFormat(e.target.value))
+        <Container className="">
+            <div className='relativee'>
+
+                {loading &&
+                    <div className='absolute w-full h-full z-[99] bg-black opacity-80'>
+                        <Loading />
+                    </div>
+                }
+                <form onSubmit={handleSubmit(submit)} className="flex flex-col gap-2 sm:flex-row p-2">
+                    <div className='flex flex-col gap-2 justify-between w-full sm:w-2/3 bg-green-380'>
+                        {post && <p className='bg-yellow-500 p-2 rounded-xl text-black font-bold'>Warning ! Do Not Edit Title : It will affect id of post</p>}
+                        <div className='flex gap-2 flex-col ss:flex-row'>
+                            <Input
+                                type="text"
+                                placeholder="Title"
+                                defaultvalues={post?.title}
+                                {...register("title", { required: true })}
+                                onChange={
+                                    (e) => {
+                                        setValue("slug", slugFormat(e.target.value))
+                                    }
                                 }
-                            }
-                        />
-                        <Input
-                            readOnly={true}
-                            type="text"
-                            placeholder="Slug"
-                            defaultvalues={post?.slug}
-                            {...register("slug", { required: true })}
+                            />
+                            <Input
+                                readOnly={true}
+                                type="text"
+                                placeholder="Slug"
+                                defaultvalues={post?.slug}
+                                {...register("slug", { required: true })}
+                            />
+                        </div>
+
+                        <PostEditor
+                            name="content"
+                            defaultvalues={post?.content}
+                            control={control}
                         />
                     </div>
 
-                    <PostEditor
-                        name="content"
-                        defaultvalues={post?.content}
-                        control={control}
-                    />
-                </div>
-
-                <div className=' flex sm:flex-col flex-col gap-2 w-full sm:w-1/3 h-full justify-end items-end'>
-                    <div className='bg-black w-full flex flex-col gap-2'>
-                        {
-                            post ?
-                                (
-                                    <img src={previewImage || appwriteService.getFilePreview(post?.featuredImage)} className='min-h-[380px] max-h-[380px] ' alt="Preview" style={{ objectFit: 'contain', objectPosition: "center" }} />
-                                )
-
-                                :
-
-                                previewImage ?
+                    <div className=' flex sm:flex-col flex-col gap-2 w-full sm:w-1/3 h-full justify-end items-end'>
+                        <div className='bg-black w-full flex flex-col gap-2'>
+                            {
+                                post ?
                                     (
-                                        <img src={previewImage} alt="Preview" className=' min-h-[380px] max-h-[380px] ' style={{ objectFit: 'contain', objectPosition: "center" }} />
-
-                                    ) :
-                                    (
-                                        <p className='text-xl font-bold min-h-[380px] max-h-[380px] flex justify-center items-center'>Choose an image</p>
-
+                                        <img src={previewImage || appwriteService.getFilePreview(post?.featuredImage)} className='min-h-[380px] max-h-[380px] ' alt="Preview" style={{ objectFit: 'contain', objectPosition: "center" }} />
                                     )
-                        }
+
+                                    :
+
+                                    previewImage ?
+                                        (
+                                            <img src={previewImage} alt="Preview" className=' min-h-[380px] max-h-[380px] ' style={{ objectFit: 'contain', objectPosition: "center" }} />
+
+                                        ) :
+                                        (
+                                            <p className='text-xl font-bold min-h-[380px] max-h-[380px] flex justify-center items-center'>Choose an image</p>
+
+                                        )
+                            }
+                        </div>
+
+
+                        <div className='flex items-center justify-center flex-col w-full gap-2'>
+
+                            <Input
+                                type="file"
+                                {...register("image", { required: !post })}
+                                defaultvaluess={post?.featuredImage}
+                                accept="image/png, image/jpeg, image/jpg"
+                                placeholder="Choose"
+                                className="w-full p-1.5 text-white border border-gray-300 rounded-lg"
+                                onChange={(e) => {
+                                    handleFileChange(e);
+                                }}
+                            />
+                            <Select
+                                options={["active", "inactive"]}
+                                defaultvalues={post?.status || ""}
+                                {...register("status", { required: true })}
+                            />
+                            <Button type='submit' classname={`bg-blue-500 p-2`}  >
+                                {post ? "Update" : "Add as New"}
+                            </Button>
+
+                        </div>
                     </div>
-
-
-                    <div className='flex items-center justify-center flex-col w-full gap-2'>
-                        <Select
-                            options={["active", "inactive"]}
-                            defaultvalues={post?.status || ""}
-                            {...register("status", { required: true })}
-                        />
-                        <Input
-                            type="file"
-                            {...register("image", { required: !post })}
-                            defaultvaluess={post?.featuredImage}
-                            accept="image/png, image/jpeg, image/jpg"
-                            placeholder="Choose"
-                            className="w-full p-1.5 text-white border border-gray-300 rounded-lg"
-                            onChange={(e) => {
-                                handleFileChange(e);
-                            }}
-                        />
-                        <Button type='submit' classname={`bg-blue-500 p-2`}  >
-                            {post ? "Update" : "Add as New"}
-                        </Button>
-
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </Container>
     );
 };

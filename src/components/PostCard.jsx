@@ -78,8 +78,10 @@ const PostCard = ({
       <div className='bg-gray-900 overflow-hidden rounded-3xl'>
         <div className={`${$id} status ${status === "active" ? 'bg-green-400' : "bg-red-600"} text-black p-4 flex justify-center items-center border-black border-[3px] rounded-full absolute top-1 right-1 z-[99]`}>
         </div>
+
         {
           isAuthor &&
+          
           <div className={`absolute list-none right-0 top-12 py-2 rounded-l-2xl bg-gray-900 cursor-pointer border-[2px] border-r-0 overflow-hidden duration-300 ${showOption ? '' : 'transform translate-x-[100%] opacity-0'}`}>
 
             <Link to={`/edit-post/${$id}`} className='hover:bg-secondary px-5 py-1 flex justify-center text-lg'>
@@ -91,7 +93,7 @@ const PostCard = ({
           </div>
         }
         <Link to={`/post/${$id}`}>
-
+        
           <img src={appwriteService.getFilePreview(featuredImage)} alt={title} className='w-full max-h-[400px] ms:max-h-[500px] xl:h-auto object-cover object-center' />
           <div className='p-3 pt-0'>
             <div className='font-bold text-xl overflow-hidden line-clamp-1'>{title}</div>

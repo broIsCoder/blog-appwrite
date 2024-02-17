@@ -13,6 +13,7 @@ import { showAlert, hideAlert } from '../store/alertSlice';
 const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    authService.dispatch = dispatch ;
 
     const { register, handleSubmit } = useForm();     // used to register and submit input data
     const loading = useSelector((state) => state.auth.loading)
