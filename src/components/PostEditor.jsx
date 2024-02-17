@@ -1,19 +1,20 @@
 import { Controller } from 'react-hook-form'
 import { Editor } from '@tinymce/tinymce-react'
 import React from 'react'
+import conf from '../conf'
 
-
-//using external component 
 const PostEditor = ({
     name, control, defaultvalues
 }) => {
     return (
+        // component from hook-form
             <Controller
                 name={name || "content"}
                 control={control}
                 render={({ field: { onChange } }) => (
+                    // component from tinymce
                     <Editor
-                        apiKey='gthj1pm7nylqje387x0d0hql97iygnc7nf5b3ega4c8udzia'
+                        apiKey= {conf.tinymce_Editor}
                         initialValue={defaultvalues}
                         init={{
                             branding: true,
