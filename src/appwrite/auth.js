@@ -1,25 +1,27 @@
 import conf from "../conf";
 import { Client, Account, ID } from "appwrite";
+import { showInfoAlert } from "../store/infoAlertSlice";
+import { useDispatch } from "react-redux";
 
 export class AuthService {
   client = new Client();
   account;
+  dispatch ;
 
-  constructor() {
+  constructor(dispatch) {
+    this.dispatch = dispatch;
     this.client
       .setEndpoint(conf.appwrite_Url)
       .setProject(conf.appwrite_ProjectId);
 
     this.account = new Account(this.client);
   }
-  
+
   //create a new account
   async createAccount({ email, password, username }) {
-    
-    console.log("signbakend",email,password,username)
     try {
       const userAccount = await this.account.create(
-        ID.unique(),        // generate unique id for user
+        ID.unique(), // generate unique id for user
         email,
         password,
         username
@@ -28,11 +30,16 @@ export class AuthService {
       if (userAccount) {
         return this.login(email, password);
       } else {
-        return false ;
+        return false;
       }
     } catch (error) {
       console.error("Appwrite service :: createAccount() :: ", error);
-      throw error
+      this.dispatch(
+        showInfoAlert({
+          message:error.message,
+        })
+      );
+      throw error;
     }
   }
 
@@ -42,6 +49,11 @@ export class AuthService {
       return await this.account.createEmailSession(email, password);
     } catch (error) {
       console.error("Appwrite service :: login() :: ", error);
+      this.dispatch(
+        showInfoAlert({
+          message:error.message,
+        })
+      );
       throw error;
     }
   }
@@ -52,7 +64,12 @@ export class AuthService {
       return await this.account.get();
     } catch (error) {
       console.error("Appwrite service :: getCurrentUser() :: ", error);
-      return false ;
+      this.dispatch(
+        showInfoAlert({
+          message:error.message,
+        })
+      );
+      return false;
     }
   }
 
@@ -62,12 +79,15 @@ export class AuthService {
       await this.account.deleteSessions();
     } catch (error) {
       console.error("Appwrite service :: logout() :: ", error);
-      throw error ;
+      this.dispatch(
+        showInfoAlert({
+          message:error.message,
+        })
+      );
+      throw error;
     }
   }
 }
 
-
 const authService = new AuthService();
-
 export default authService;

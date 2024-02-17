@@ -3,10 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom'
 import appwriteService from '../appwrite/config';
 import Container from '../components/container/Container'
 import { PostForm } from '../components';
+import { useDispatch } from 'react-redux';
 
 const EditPost = () => {
   const param = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  appwriteService.dispatch = dispatch ;
 
   const [post, setpost] = useState(null);
 

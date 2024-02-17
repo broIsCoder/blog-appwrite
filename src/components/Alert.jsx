@@ -10,7 +10,7 @@ const Alert = ({ show }) => {
     useEffect(() => {
         const id = setTimeout(() => {
             dispatch(hideAlert());
-        }, 7000);
+        }, 5000);
         return () => {
             clearTimeout(id);
         }

@@ -13,6 +13,7 @@ import Header from './header/Header'
 import LogoutBtn from "./header/LogoutBtn";
 import Loading from "./Loading";
 import Alert from "./Alert";
+import InfoAlert from "./InfoAlert";
 
 export {
   Protected,
@@ -29,5 +30,6 @@ export {
   Header,
   LogoutBtn,
   Loading,
-  Alert
+  Alert,
+  InfoAlert
 };

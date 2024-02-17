@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import Container from '../container/Container';
 import Loading from '../Loading';
 import { showAlert } from '../../store/alertSlice'
+import { showInfoAlert } from '../../store/infoAlertSlice';
 
 // This component serves fo{r both adding new posts and updating existing ones.
 // If `post` is provided, it means an existing post is being updated.
@@ -17,6 +18,7 @@ import { showAlert } from '../../store/alertSlice'
 
 const PostForm = ({ post }) => {
     const dispatch = useDispatch();
+    appwriteService.dispatch = dispatch;
     const [previewImage, setPreviewImage] = useState(null);
     const [loading, setloading] = useState(true);
     const navigate = useNavigate();
@@ -26,7 +28,6 @@ const PostForm = ({ post }) => {
     const { register, handleSubmit, setValue, watch, control, formState: { errors }, } = useForm();
 
     const submit = async (data) => {
-
         try {
             setloading(true);
             // If `post` exists, update the existing post.
@@ -35,7 +36,7 @@ const PostForm = ({ post }) => {
                     message: "Updating Post",
                     type: "loading"
                 }))
-                const file = data.image[0] ? await appwriteService.uploadFile(data.image[0]) : null;     // upload new image with unique id
+                const file = data.image[0] ? await appwriteService(dispatch).uploadFile(data.image[0]) : null;     // upload new image with unique id
 
                 if (file) {
                     await appwriteService.deleteFile(post.featuredImage);      // delete old image of unique id
@@ -85,7 +86,7 @@ const PostForm = ({ post }) => {
                         setloading(false);
                         dispatch(showAlert({
                             message: "Failed to Add New Post",
-                            type: "error"
+                            type: "warning"
                         }));
                     }
                 }
@@ -140,7 +141,15 @@ const PostForm = ({ post }) => {
         };
     }, [post]);
 
-
+    useEffect(() => {
+        if (!post) {
+            dispatch(showInfoAlert(
+                {
+                    message: "Please Fill Every Field"
+                }
+            ));
+        }
+    }, [])
     // OPTIONAL CODE FOR setting value of slug when change in title
 
     // useEffect(() => {

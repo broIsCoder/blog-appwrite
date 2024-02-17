@@ -12,6 +12,7 @@ const PostCard = ({
 }) => {
   const [loading, setloading] = useState(false);
   const dispatch = useDispatch();
+  appwriteService.dispatch = dispatch ;
   const [showOption, setshowOption] = useState(false);
   const userData = useSelector((state) => state.auth.userData);
   const isAuthor = userData ? userId === userData.$id : false;

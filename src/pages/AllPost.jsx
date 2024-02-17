@@ -11,12 +11,10 @@ const AllPost = () => {
 
   useEffect(() => {
     dispatch(fetchPosts());
-    console.log(loadingPosts)
   },[dispatch]);
 
   useEffect(() => {
-    dispatch(fetchPosts())
-    console.log("Stored Posts",posts);
+    dispatch(fetchPosts(dispatch))
   },[]);
   
 

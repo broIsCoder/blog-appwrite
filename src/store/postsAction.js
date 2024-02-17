@@ -3,7 +3,9 @@ import appwriteService from "../appwrite/config";
 import { showAlert } from "./alertSlice";
 import { storePosts, toggleLoading } from "./postSlice";
 
-export const fetchPosts = () => {
+export const fetchPosts = (dispatch) => {
+  
+    appwriteService.dispatch = dispatch ;
   return async (dispatch) => {
     dispatch(toggleLoading(true));
     dispatch(
@@ -17,7 +19,6 @@ export const fetchPosts = () => {
       const response = await appwriteService.getPosts([]);
       if (response) {
         dispatch(storePosts(response.documents));
-        console.log("Fetched Posts:",response.documents);
         dispatch(
           showAlert({
             message: "Posts Fetched",
@@ -41,7 +42,6 @@ export const fetchPosts = () => {
       );
     } finally {
       dispatch(toggleLoading(false));
-
     }
   };
 };

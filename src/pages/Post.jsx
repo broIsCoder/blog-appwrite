@@ -83,12 +83,13 @@ const Post = () => {
           )}
         </div>
       </div>
-      <div className='sm:h-full h-full sm:w-1/2  w-full sm:overflow-y-auto bg-primary p-3 rounded-xl'>
-        <h1 className='text-3xl font-bold mb-6'>{post.title}</h1>
-        <div className='browser-css'>
-          {parse(post.content)}
-        </div>
-      </div>
+      <div className='sm:h-full h-full sm:w-1/2 w-full overflow-y-auto p-3 bg-white rounded-xl flex flex-col'>
+  <h1 className='text-3xl font-bold mb-6 text-black'>{post.title}</h1>
+  <div className='text-black break-words'>
+    {parse(post.content)}
+  </div>
+</div>
+
     </div>
   ) : null
 

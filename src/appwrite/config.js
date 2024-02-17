@@ -1,12 +1,16 @@
 import conf from "../conf";
 import { Client, Databases, Storage, Query, ID } from "appwrite";
+import { showInfoAlert } from "../store/infoAlertSlice";
+import { useDispatch } from "react-redux";
 
 export class Service {
   client = new Client();
   databases;
   bucket;
+  dispatch;
 
-  constructor() {
+  constructor(dispatch) {
+    this.dispatch = dispatch;
     this.client
       .setEndpoint(conf.appwrite_Url)
       .setProject(conf.appwrite_ProjectId);
@@ -28,6 +32,11 @@ export class Service {
       );
     } catch (error) {
       console.log("Appwrite service :: getPost() :: ", error);
+      this.dispatch(
+        showInfoAlert({
+          message:error.message,
+        })
+      );
       return false ;
     }
   }
@@ -42,6 +51,11 @@ export class Service {
       );
     } catch (error) {
       console.log("Appwrite service :: getPosts() :: ", error);
+      this.dispatch(
+        showInfoAlert({
+          message:error.message,
+        })
+      );
       return false;
     }
   }
@@ -63,6 +77,11 @@ export class Service {
       );
     } catch (error) {
       console.log("Appwrite service :: createPost() :: ", error);
+      this.dispatch(
+        showInfoAlert({
+          message:error.message,
+        })
+      );
       return false;
     }
   }
@@ -84,6 +103,11 @@ export class Service {
       );
     } catch (error) {
       console.log("Appwrite service :: updatePost() :: ", error);
+      this.dispatch(
+        showInfoAlert({
+          message:error.message,
+        })
+      );
       return false;
     }
   }
@@ -99,6 +123,11 @@ export class Service {
       return true;
     } catch (error) {
       console.log("Appwrite service :: deletePost() :: ", error);
+      this.dispatch(
+        showInfoAlert({
+          message:error.message,
+        })
+      );
       return false;
     }
   }
@@ -115,6 +144,11 @@ export class Service {
       );
     } catch (error) {
       console.log("Storage service :: uploadFile() :: ", error);
+      this.dispatch(
+        showInfoAlert({
+          message:error.message,
+        })
+      );
       return false;
     }
   }
@@ -125,6 +159,11 @@ export class Service {
       return await this.bucket.deleteFile(conf.appwrite_BucketId, fileId);
     } catch (error) {
       console.log("Storage service :: deleteFile() :: ", error);
+      this.dispatch(
+        showInfoAlert({
+          message:error.message,
+        })
+      );
       return false;
     }
   }
@@ -135,5 +174,8 @@ export class Service {
   }
 }
 
+// const dispatch = useDispatch()
+// const appwriteService = new Service(dispatch);
 const appwriteService = new Service();
 export default appwriteService;
+

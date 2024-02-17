@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom'
-import { Alert, Footer, Header } from '../src/components'
+import { Alert, Footer, Header,InfoAlert } from '../src/components'
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import authService from './appwrite/auth';
@@ -10,6 +10,7 @@ function App() {
   const loading = useSelector((state) => state.auth.loading);
   const dispatch = useDispatch();
   const show = useSelector((state) => state.alert.show);
+  const infoShow = useSelector((state) => state.infoAlert.show);
 
   // try to login
   useEffect(() => {
@@ -20,7 +21,7 @@ function App() {
           dispatch(login({userData:user}));
           dispatch(showAlert({
             message: "You are logged in ! Welcome Back",
-            type: "info"
+            type:'success'
           }));
         } else {
           dispatch(logout());
@@ -39,6 +40,7 @@ function App() {
 
   return (
     <div className='relative'>
+      <InfoAlert show={infoShow} />
       <Alert show={show} />
       {!loading ?
         <div className='flex flex-wrap content-between bg-black text-white'>

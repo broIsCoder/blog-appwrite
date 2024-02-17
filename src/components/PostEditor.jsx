@@ -11,6 +11,7 @@ const PostEditor = ({
             <Controller
                 name={name || "content"}
                 control={control}
+                rules={{ required: true }} // Add required rule if specified
                 render={({ field: { onChange } }) => (
                     // component from tinymce
                     <Editor
