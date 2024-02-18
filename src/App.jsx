@@ -40,7 +40,7 @@ function App() {
   }, [])
 
   return (
-    <div className='relative'>
+    <div className='relative overflow-hidden'>
       <InfoAlert show={infoShow} />
       <Alert show={show} />
       {!loading ?

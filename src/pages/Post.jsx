@@ -70,7 +70,7 @@ const Post = () => {
         </div>
       }
       <div className='sm:h-full h-[450px] sm:w-1/2  w-full'>
-        <div className="relative w-full h-full bg-black duration-200 rounded-xl object-cover">
+        <div className="relative w-full h-full bg-black duration-200 rounded-xl object-cover overflow-hidden">
           <div className={`status ${post?.status === "active" ? 'bg-green-400':"bg-red-600"} h-[30px] w-[30px] border-black border-[5px] rounded-full absolute top-1 right-1 z-[99]`}></div>
           
           <img src={appwriteServcie.getFilePreview(post.featuredImage)} alt={post.title} className='relative h-full w-full object-scale-down' />
@@ -87,8 +87,7 @@ const Post = () => {
       <div className='sm:h-full h-full sm:w-1/2 w-full overflow-y-auto p-3 bg-white rounded-xl flex flex-col'>
   <h1 className='text-3xl font-bold mb-6 text-black break-words'>{post.title}</h1>
   <div className='text-black break-words overflow-auto '>
-  {/* using html-react-parser for creatingElement html element in react */}
-    {post.content}
+  {post.content}
   </div>
 </div>
 
