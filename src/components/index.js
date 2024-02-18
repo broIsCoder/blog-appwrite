@@ -5,7 +5,6 @@ import Logo from "./Logo";
 import Button from "./Button";
 import PostCard from "./PostCard";
 import Footer from "./footer/Footer";
-import PostEditor from "./PostEditor";
 import PostForm from "./post-form/postForm";
 import Login from "./Login";
 import Signup from "./Signup";
@@ -23,7 +22,6 @@ export {
   Button,
   PostCard,
   Footer,
-  PostEditor,
   PostForm,
   Login,
   Signup,

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import appwriteServcie from '../appwrite/config'
 import { Button, Loading } from '../components'
-import parse from 'html-react-parser'
+// import parse from 'html-react-parser'
 import { useDispatch, useSelector } from 'react-redux'
 import { showAlert } from '../store/alertSlice'
 
@@ -77,9 +77,9 @@ const Post = () => {
           {isAuthor && (
             <div className='bottom-1 absolute right-1 flex gap-1'>
               <Link to={`/edit-post/${post.$id}`}>
-                <Button bgColor='bg-gray-600 rounded-full'>Edit</Button>
+                <Button bgColor='bg-gray-600 rounded-l-xl rounded-r-none hover:bg-gray-800'>Edit</Button>
               </Link>
-              <Button bgColor='bg-gray-600 rounded-full' onClick={deletePost}>Delete</Button>
+              <Button bgColor='bg-gray-600 rounded-r-xl rounded-l-none hover:bg-gray-800' onClick={deletePost}>Delete</Button>
             </div>
           )}
         </div>
@@ -88,7 +88,7 @@ const Post = () => {
   <h1 className='text-3xl font-bold mb-6 text-black break-words'>{post.title}</h1>
   <div className='text-black break-words overflow-auto '>
   {/* using html-react-parser for creatingElement html element in react */}
-    {parse(post.content)}
+    {post.content}
   </div>
 </div>
 

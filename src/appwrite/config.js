@@ -80,7 +80,6 @@ export class Service {
 
   //create a blog post
   async createPost({ title, content, featuredImage, status, userId }) {
-    console.log("Content:",content);
     try {
       return await this.databases.createDocument(
         conf.appwrite_DatabaseId,

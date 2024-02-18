@@ -2,7 +2,6 @@ import { useForm } from 'react-hook-form';   //Using hookForm to reduce no.of st
 import React, { useState, useEffect, useId } from 'react';
 import Button from '../Button';
 import Input from '../Input';
-import PostEditor from '../PostEditor';
 import Select from '../Select';
 import appwriteService from '../../appwrite/config';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,7 +10,6 @@ import Container from '../container/Container';
 import Loading from '../Loading';
 import { showAlert } from '../../store/alertSlice'
 import { showInfoAlert } from '../../store/infoAlertSlice';
-import { ID } from 'appwrite';
 
 // This component serves fo{r both adding new posts and updating existing ones.
 // If `post` is provided, it means an existing post is being updated.
@@ -21,7 +19,7 @@ const PostForm = ({ post }) => {
     const dispatch = useDispatch();
     appwriteService.dispatch = dispatch;
     const [previewImage, setPreviewImage] = useState(null);
-    const [loading, setloading] = useState(true);
+    const [loading, setloading] = useState(false);
     const navigate = useNavigate();
     const userData = useSelector((state) => state.auth.userData);
 
@@ -39,16 +37,16 @@ const PostForm = ({ post }) => {
                 }));
 
                 const file = data.featuredImage[0] ?
-                 await appwriteService.uploadFile(data.featuredImage[0]) : 
-                 null;     // upload new image with unique id
+                    await appwriteService.uploadFile(data.featuredImage[0]) :
+                    null;     // upload new image with unique id
 
                 if (file) {
                     await appwriteService.deleteFile(post.featuredImage);      // delete old image of unique id
                 };
 
-                const dbPost = await appwriteService.updatePost({ 
+                const dbPost = await appwriteService.updatePost({
                     ...data,
-                    postId:post.$id ,
+                    postId: post.$id,
                     // if image was changed , update featuredImage else make it undefined 
                     featuredImage: file ? file.$id : undefined     // updating `$id` to link to new image
                 });
@@ -131,16 +129,6 @@ const PostForm = ({ post }) => {
             //if image was not changed , it won't be changed in database as well
             // if image was changed , we will add featuredImage in hook-form & upload it 
         }
-        const hideLaggyAnimation = () => {
-            const id = setTimeout(() => {
-                setloading(false);
-            }, 1500);
-            return id;
-        };
-        const timeoutId = hideLaggyAnimation();
-        return () => {
-            clearTimeout(timeoutId);
-        };
     }, [post]);
 
     useEffect(() => {
@@ -174,7 +162,7 @@ const PostForm = ({ post }) => {
                     </div>
                 }
                 <form onSubmit={handleSubmit(submit)} className="flex flex-col gap-2 sm:flex-row p-2">
-                    <div className='flex flex-col gap-2 justify-between w-full sm:w-2/3 bg-green-380'>
+                    <div className='flex flex-col gap-2 justify-start w-full sm:w-2/3 bg-green-380'>
                         <div className='flex gap-2 flex-col ss:flex-row'>
                             <Input
                                 type="text"
@@ -185,11 +173,15 @@ const PostForm = ({ post }) => {
                             />
                         </div>
 
-                        <PostEditor
+
+                        <textarea
+                            cols="30"
+                            rows="10"
+                            className='text-black p-2 rounded-xl min-h-32 sm:min-h-96'
                             name="content"
                             defaultvalues={post?.content || ""}
-                            control={control}
-                        />
+                            {...register("content", { required: true })}
+                        ></textarea>
                     </div>
 
                     <div className=' flex sm:flex-col flex-col gap-2 w-full sm:w-1/3 h-full justify-end items-end'>

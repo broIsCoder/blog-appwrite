@@ -5,8 +5,8 @@ import Logo from "../Logo"
 function Footer() {
     return (
         <section className="flex overflow-hidden flex-col ms:flex-row bg-gray-900">
-            <div className='flex ms:w-[60%] w-full flex-col ss:flex-row items-center justify-center'>
-                <div className="w-full p-6 flex justify-center">
+            <div className='flex ms:w-[60%] w-full flex-col ss:flex-row justify-start items-start'>
+                <div className="w-full p-6 h-full">
 
                     <div className="h-full ">
                         <h3 className="tracking-px mb-4  text-xs font-semibold uppercase text-white">
@@ -48,7 +48,7 @@ function Footer() {
                         </ul>
                     </div>
                 </div>
-                <div className="w-full p-6 flex justify-center">
+                <div className="w-full h-full p-6">
                     <div className="h-full">
                         <h3 className="tracking-px mb-4  text-xs font-semibold uppercase text-white">
                             Support
@@ -89,8 +89,8 @@ function Footer() {
                         </ul>
                     </div>
                 </div>
-                <div className="w-full p-6 flex justify-center">
-                    <div className="h-full">
+                <div className="w-full h-full p-6 ">
+                    <div className="">
                         <h3 className="tracking-px mb-4  text-xs font-semibold uppercase text-white">
                             Legals
                         </h3>
@@ -123,8 +123,8 @@ function Footer() {
                     </div>
                 </div>
             </div>
-            <div className="w-full ms:w-[40%] p-6 flex flex-col ss:flex-row justify-center items-center">
-                <Logo width="100px" />
+            <div className="w-full ms:w-[40%] p-6 flex ss:flex-row justify-start ss:justify-center items-center">
+                <Logo width="60px" />
                 <p className="text-sm text-white mt-6">
                     &copy; Copyright 2023. All Rights Reserved by Me.
                 </p>
