@@ -86,7 +86,7 @@ const Post = () => {
       </div>
       <div className='sm:h-full h-full sm:w-1/2 w-full overflow-y-auto p-3 bg-white rounded-xl flex flex-col'>
   <h1 className='text-3xl font-bold mb-6 text-black break-words'>{post.title}</h1>
-  <div className='text-black break-words'>
+  <div className='text-black break-words overflow-auto '>
   {/* using html-react-parser for creatingElement html element in react */}
     {parse(post.content)}
   </div>

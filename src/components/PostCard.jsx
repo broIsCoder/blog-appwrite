@@ -8,7 +8,7 @@ import { showAlert } from '../store/alertSlice.js'
 import { removePost } from '../store/postSlice.js'
 
 const PostCard = ({
-  $id, title, featuredImage, content, status, userId 
+  $id, title, featuredImage, status, userId 
 }) => {
   const [loading, setloading] = useState(false);
   const dispatch = useDispatch();
@@ -64,7 +64,7 @@ const PostCard = ({
   })
 
   return (
-    <div className='relative hover:opacity-70 transition duration-300  rounded-3xl overflow-hidden'>
+    <div className='relative hover:opacity-70 transition duration-300  rounded-3xl'>
 
       {
         loading &&
@@ -82,24 +82,21 @@ const PostCard = ({
         {
           isAuthor &&
           
-          <div className={`absolute list-none right-0 top-12 py-2 rounded-l-2xl bg-gray-900 cursor-pointer border-[2px] border-r-0 overflow-hidden duration-300 ${showOption ? '' : 'transform translate-x-[100%] opacity-0'}`}>
+          <div className={`absolute list-none right-0 top-12 py-2 rounded-2xl bg-gray-900 cursor-pointer border-[2px] overflow-hidden duration-300 ${showOption ? '' : 'transform translate-x-[100%] opacity-0'}`}>
 
-            <Link to={`/edit-post/${$id}`} className='hover:bg-secondary px-5 py-1 flex justify-center text-lg'>
+            <Link to={`/edit-post/${$id}`} className='hover:bg-gray-500 duration-300 px-5 py-1 flex justify-center text-lg'>
               Edit
             </Link>
-            <button onClick={deletePost} className='hover:bg-secondary px-5 py-1 flex justify-center text-lg'>
+            <button onClick={deletePost} className='hover:bg-gray-500 duration-300 px-5 py-1 flex justify-center text-lg'>
               Delete
             </button>
           </div>
         }
         <Link to={`/post/${$id}`}>
         
-          <img src={appwriteService.getFilePreview(featuredImage)} alt={title} className='w-full max-h-[400px] ms:max-h-[500px] xl:h-auto object-cover object-center' />
-          <div className='p-3 pt-0'>
+          <img src={appwriteService.getFilePreview(featuredImage)} alt={title} className='w-full min-h-[150px] max-h-[300px] sm:min-h-[250px] sm:max-h-[400px] xl:h-auto sm:object-contain object-cover sm:object-center' />
+          <div className='p-3 pt-1'>
             <div className='font-bold text-xl overflow-hidden line-clamp-1'>{title}</div>
-            <div className='text-gray-400 line-clamp-2'>
-              {parse(content)}
-            </div>
           </div>
         </Link>
       </div>

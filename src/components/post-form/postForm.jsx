@@ -33,7 +33,6 @@ const PostForm = ({ post }) => {
             setloading(true);
             // If `post` exists, update the existing post.
             if (post) {
-                console.log('data : ',post.featuredImage)
                 dispatch(showAlert({
                     message: "Updating Post",
                     type: "loading"
@@ -43,19 +42,13 @@ const PostForm = ({ post }) => {
                  await appwriteService.uploadFile(data.featuredImage[0]) : 
                  null;     // upload new image with unique id
 
-                console.log("file : ",file);
                 if (file) {
-                    console.log("image was updated")
                     await appwriteService.deleteFile(post.featuredImage);      // delete old image of unique id
-                }else{
-                    console.log("image was not updated")
-
-                }
+                };
 
                 const dbPost = await appwriteService.updatePost({ 
                     ...data,
                     postId:post.$id ,
-                    userId: userData.$id ,
                     // if image was changed , update featuredImage else make it undefined 
                     featuredImage: file ? file.$id : undefined     // updating `$id` to link to new image
                 });
@@ -182,7 +175,6 @@ const PostForm = ({ post }) => {
                 }
                 <form onSubmit={handleSubmit(submit)} className="flex flex-col gap-2 sm:flex-row p-2">
                     <div className='flex flex-col gap-2 justify-between w-full sm:w-2/3 bg-green-380'>
-                        {post && <p className='bg-yellow-500 p-2 rounded-xl text-black font-bold'>Warning ! Do Not Edit Title : It will affect id of post</p>}
                         <div className='flex gap-2 flex-col ss:flex-row'>
                             <Input
                                 type="text"

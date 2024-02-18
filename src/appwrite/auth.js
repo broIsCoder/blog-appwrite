@@ -63,11 +63,11 @@ export class AuthService {
       return await this.account.get();
     } catch (error) {
       console.error("Appwrite service :: getCurrentUser() :: ", error);
-      this.dispatch(
-        showInfoAlert({
-          message:error.message,
-        })
-      );
+      // this.dispatch(
+      //   showInfoAlert({
+      //     message:error.message,
+      //   })
+      // );
       return false;
     }
   }

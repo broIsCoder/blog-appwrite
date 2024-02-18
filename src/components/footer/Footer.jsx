@@ -126,7 +126,7 @@ function Footer() {
             <div className="w-full ms:w-[40%] p-6 flex flex-col ss:flex-row justify-center items-center">
                 <Logo width="100px" />
                 <p className="text-sm text-white mt-6">
-                    &copy; Copyright 2023. All Rights Reserved by DevUI.
+                    &copy; Copyright 2023. All Rights Reserved by Me.
                 </p>
             </div>
         </section>

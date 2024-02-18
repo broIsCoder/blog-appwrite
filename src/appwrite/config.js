@@ -80,8 +80,7 @@ export class Service {
 
   //create a blog post
   async createPost({ title, content, featuredImage, status, userId }) {
-    
-    console.log("Add Queued",{postId,title,content,featuredImage,status ,userId})
+    console.log("Content:",content);
     try {
       return await this.databases.createDocument(
         conf.appwrite_DatabaseId,
@@ -107,8 +106,7 @@ export class Service {
   }
 
   //update a blog post
-  async updatePost({ postId, title, content, featuredImage, status,userId }) {
-    console.log("Update Queued",{postId,title,content,featuredImage,status ,userId})
+  async updatePost({ postId, title, content, featuredImage, status }) {
     try {
       return await this.databases.updateDocument(
         conf.appwrite_DatabaseId,
