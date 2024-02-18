@@ -20,18 +20,18 @@ export class Service {
   }
 
   //Database service for storing blog
-  //slug is unique for each blog post (UNIQUE ID)
+  //postId is unique for each blog post (UNIQUE ID)
 
   // get a blog post
-  async getPost(slug) {
+  async getPost(postId) {
     try {
       return await this.databases.getDocument(
         conf.appwrite_DatabaseId,
         conf.appwrite_CollectionId,
-        slug
+        postId
       );
     } catch (error) {
-      console.log("Appwrite service :: getPost() :: ", error);
+      console.error("Appwrite service :: getPost() :: ", error);
       this.dispatch(
         showInfoAlert({
           message:error.message,
@@ -41,16 +41,15 @@ export class Service {
     }
   }
 
-  // get list of active status blog posts
-  async getPosts(queries = [Query.equal("status", true)]) {
+  //get all documents(posts)
+  async getPosts() {
     try {
       return await this.databases.listDocuments(
         conf.appwrite_DatabaseId,
         conf.appwrite_CollectionId,
-        queries
       );
     } catch (error) {
-      console.log("Appwrite service :: getPosts() :: ", error);
+      console.error("Appwrite service :: getPosts() :: ", error);
       this.dispatch(
         showInfoAlert({
           message:error.message,
@@ -60,13 +59,34 @@ export class Service {
     }
   }
 
+  // get documents(posts) of active status
+  // async getPosts(queries = [Query.equal("status", "active")]) {
+  //   try {
+  //     return await this.databases.listDocuments(
+  //       conf.appwrite_DatabaseId,
+  //       conf.appwrite_CollectionId,
+  //       queries
+  //     );
+  //   } catch (error) {
+  //     console.log("Appwrite service :: getPosts() :: ", error);
+  //     this.dispatch(
+  //       showInfoAlert({
+  //         message:error.message,
+  //       })
+  //     );
+  //     return false;
+  //   }
+  // }
+
   //create a blog post
-  async createPost({ title, content, featuredImage, status, userId, slug }) {
+  async createPost({ title, content, featuredImage, status, userId }) {
+    
+    console.log("Add Queued",{postId,title,content,featuredImage,status ,userId})
     try {
       return await this.databases.createDocument(
         conf.appwrite_DatabaseId,
         conf.appwrite_CollectionId,
-        slug,
+        ID.unique(),
         {
           title,
           content,
@@ -76,7 +96,7 @@ export class Service {
         }
       );
     } catch (error) {
-      console.log("Appwrite service :: createPost() :: ", error);
+      console.error("Appwrite service :: createPost() :: ", error);
       this.dispatch(
         showInfoAlert({
           message:error.message,
@@ -87,13 +107,13 @@ export class Service {
   }
 
   //update a blog post
-  async updatePost({ slug, title, content, featuredImage, status }) {
-    console.log("Updated Queued",{slug,title,content,featuredImage,status})
+  async updatePost({ postId, title, content, featuredImage, status,userId }) {
+    console.log("Update Queued",{postId,title,content,featuredImage,status ,userId})
     try {
       return await this.databases.updateDocument(
         conf.appwrite_DatabaseId,
         conf.appwrite_CollectionId,
-        slug,
+        postId,
         {
           title,
           content,
@@ -102,7 +122,7 @@ export class Service {
         }
       );
     } catch (error) {
-      console.log("Appwrite service :: updatePost() :: ", error);
+      console.error("Appwrite service :: updatePost() :: ", error);
       this.dispatch(
         showInfoAlert({
           message:error.message,
@@ -113,16 +133,16 @@ export class Service {
   }
 
   //delete a blog post
-  async deletePost( slug ) {
+  async deletePost( postId ) {
     try {
       await this.databases.deleteDocument(
         conf.appwrite_DatabaseId,
         conf.appwrite_CollectionId,
-        slug
+        postId
       );
       return true;
     } catch (error) {
-      console.log("Appwrite service :: deletePost() :: ", error);
+      console.error("Appwrite service :: deletePost() :: ", error);
       this.dispatch(
         showInfoAlert({
           message:error.message,
@@ -143,7 +163,7 @@ export class Service {
         file
       );
     } catch (error) {
-      console.log("Storage service :: uploadFile() :: ", error);
+      console.error("Storage service :: uploadFile() :: ", error);
       this.dispatch(
         showInfoAlert({
           message:error.message,
@@ -158,7 +178,7 @@ export class Service {
     try {
       return await this.bucket.deleteFile(conf.appwrite_BucketId, fileId);
     } catch (error) {
-      console.log("Storage service :: deleteFile() :: ", error);
+      console.error("Storage service :: deleteFile() :: ", error);
       this.dispatch(
         showInfoAlert({
           message:error.message,
@@ -170,7 +190,12 @@ export class Service {
 
   //preview featuredImage
   getFilePreview(fileId) {
-    return this.bucket.getFilePreview(conf.appwrite_BucketId, fileId).href;
+    try {
+      return this.bucket.getFilePreview(conf.appwrite_BucketId, fileId).href;
+    } catch (error) {
+      console.error("Storage service :: getFilePreview() :: ", error);
+      return false ;
+    }
   }
 }
 

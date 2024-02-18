@@ -11,6 +11,7 @@ import Container from '../container/Container';
 import Loading from '../Loading';
 import { showAlert } from '../../store/alertSlice'
 import { showInfoAlert } from '../../store/infoAlertSlice';
+import { ID } from 'appwrite';
 
 // This component serves fo{r both adding new posts and updating existing ones.
 // If `post` is provided, it means an existing post is being updated.
@@ -28,26 +29,35 @@ const PostForm = ({ post }) => {
     const { register, handleSubmit, setValue, watch, control, formState: { errors }, } = useForm();
 
     const submit = async (data) => {
-        
-        console.log("Submitted Data:",data);
         try {
             setloading(true);
             // If `post` exists, update the existing post.
             if (post) {
+                console.log('data : ',post.featuredImage)
                 dispatch(showAlert({
                     message: "Updating Post",
                     type: "loading"
-                }))
-                const file = data.image[0] ? await appwriteService(dispatch).uploadFile(data.image[0]) : null;     // upload new image with unique id
+                }));
 
+                const file = data.featuredImage[0] ?
+                 await appwriteService.uploadFile(data.featuredImage[0]) : 
+                 null;     // upload new image with unique id
+
+                console.log("file : ",file);
                 if (file) {
+                    console.log("image was updated")
                     await appwriteService.deleteFile(post.featuredImage);      // delete old image of unique id
+                }else{
+                    console.log("image was not updated")
+
                 }
 
-                const dbPost = await appwriteService.updatePost({         // update old `post` in database
-                    slug: post.$id,
+                const dbPost = await appwriteService.updatePost({ 
                     ...data,
-                    featuredImage: file ? file.$id : undefined       // updating `$id` to link to new image
+                    postId:post.$id ,
+                    userId: userData.$id ,
+                    // if image was changed , update featuredImage else make it undefined 
+                    featuredImage: file ? file.$id : undefined     // updating `$id` to link to new image
                 });
 
                 if (dbPost) {
@@ -71,11 +81,14 @@ const PostForm = ({ post }) => {
                     message: "Adding Post",
                     type: "loading"
                 }))
-                const file = await appwriteService.uploadFile(data.image[0]);         // upload image with unique id
+                const file = await appwriteService.uploadFile(data.featuredImage[0]);         // upload image with unique id
 
                 if (file) {
                     data.featuredImage = file.$id;          // adding `$id` to link to image
-                    const dbPost = await appwriteService.createPost({ ...data, userId: userData.$id });       // upload new `post` in database    
+                    const dbPost = await appwriteService.createPost({
+                        ...data,
+                        userId: userData.$id
+                    });       // upload new `post` in database    
 
                     if (dbPost) {
                         setloading(false);
@@ -116,20 +129,14 @@ const PostForm = ({ post }) => {
         }
     };
 
-    // Function to format title into a slug
-    const slugFormat = ((value) => {
-        if (value && typeof value === 'string') {
-            return value.trim().toLocaleLowerCase().replace(/[^a-zA-Z\d\s]+/g, '-').replace(/\s/g, "-");      //replace ' ' with '-'
-        }
-    });
-
     useEffect(() => {
         if (post) {
             setValue("title", post.title);
-            setValue("slug", post.$id);
+            setValue("postId", post.$id);
             setValue("content", post.content);
             setValue("status", post.status);
-            setValue("image", post.featuredImage);
+            //if image was not changed , it won't be changed in database as well
+            // if image was changed , we will add featuredImage in hook-form & upload it 
         }
         const hideLaggyAnimation = () => {
             const id = setTimeout(() => {
@@ -152,17 +159,17 @@ const PostForm = ({ post }) => {
             ));
         }
     }, [])
-    // OPTIONAL CODE FOR setting value of slug when change in title
+    // OPTIONAL CODE FOR setting value of postId when change in title
 
     // useEffect(() => {
     //     // Runs every time there is changes in the hookForm's registered value ,
     //     watch((value, { name }) => {
-    //         // if "title" field was changed, update the "slug" field accordingly.
+    //         // if "title" field was changed, update the "postId" field accordingly.
     //         if (name === 'title') {
-    //             setValue("slug", slugFormat(value.title), { shouldValidate: true });
+    //             setValue("postId", postIdFormat(value.title), { shouldValidate: true });
     //         }
     //     });
-    // }, [watch, setValue]); // Re-run the effect when `watch`, `slug`, or `setValue` changes. // not neccessary i think
+    // }, [watch, setValue]); // Re-run the effect when `watch`, `postId`, or `setValue` changes. // not neccessary i think
 
     return (
         <Container className="">
@@ -180,26 +187,15 @@ const PostForm = ({ post }) => {
                             <Input
                                 type="text"
                                 placeholder="Title"
-                                defaultvalues={post?.title}
+                                defaultvalues={post?.title || ''}
                                 {...register("title", { required: true })}
-                                onChange={
-                                    (e) => {
-                                        setValue("slug", slugFormat(e.target.value))
-                                    }
-                                }
-                            />
-                            <Input
-                                readOnly={true}
-                                type="text"
-                                placeholder="Slug"
-                                defaultvalues={post?.slug}
-                                {...register("slug", { required: true })}
+
                             />
                         </div>
 
                         <PostEditor
                             name="content"
-                            defaultvalues={post?.content}
+                            defaultvalues={post?.content || ""}
                             control={control}
                         />
                     </div>
@@ -231,8 +227,8 @@ const PostForm = ({ post }) => {
 
                             <Input
                                 type="file"
-                                {...register("image", { required: !post })}
-                                defaultvaluess={post?.featuredImage}
+                                {...register("featuredImage", { required: !post })}
+                                defaultvaluess={post?.featuredImage || null}
                                 accept="image/png, image/jpeg, image/jpg"
                                 placeholder="Choose"
                                 className="w-full p-1.5 text-white border border-gray-300 rounded-lg"
@@ -242,7 +238,7 @@ const PostForm = ({ post }) => {
                             />
                             <Select
                                 options={["active", "inactive"]}
-                                defaultvalues={post?.status || ""}
+                                defaultvalues={post?.status || "active"}
                                 {...register("status", { required: true })}
                             />
                             <Button type='submit' classname={`bg-blue-500 p-2`}  >

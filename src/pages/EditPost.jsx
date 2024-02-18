@@ -15,7 +15,7 @@ const EditPost = () => {
 
   useEffect(() => {
     if (param) {
-      appwriteService.getPost(param?.slug).then((post) => {
+      appwriteService.getPost(param?.postId).then((post) => {
         if (post) {
           setpost(post);
         }
@@ -24,7 +24,7 @@ const EditPost = () => {
         }
       })
     }
-  }, [param?.slug])
+  }, [param?.postId])
 
   return (
     <div className='bg-primary'>

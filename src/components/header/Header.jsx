@@ -13,17 +13,17 @@ const Header = () => {
     const navItems = [
         {
             name: "Home",
-            slug: "/",
+            postId: "/",
             active: authStatus
         },
         {
             name: "All Posts",
-            slug: "/all-posts",
+            postId: "/all-posts",
             active: authStatus
         },
         {
             name: "Add Post",
-            slug: "/add-post",
+            postId: "/add-post",
             active: authStatus
         },
 
@@ -71,7 +71,7 @@ const Header = () => {
                                 {navItems.map((item) =>
                                     item.active ? (
                                         <li key={item.name}>
-                                            <button onClick={() => navigate(item.slug)} className='inline-block w-full px-6 py-2 duration-200 hover:bg-gray-700 rounded-xl'>
+                                            <button onClick={() => navigate(item.postId)} className='inline-block w-full px-6 py-2 duration-200 hover:bg-gray-700 rounded-xl'>
                                                 {item.name}
                                             </button>
                                         </li>
@@ -85,7 +85,7 @@ const Header = () => {
                                 {navItems.map((item) =>
                                     item.active ? (
                                         <li key={item.name}>
-                                            <button onClick={() => navigate(item.slug)} className='w-full px-6 py-2 duration-200 hover:bg-gray-700 rounded-lg'>
+                                            <button onClick={() => navigate(item.postId)} className='w-full px-6 py-2 duration-200 hover:bg-gray-700 rounded-lg'>
                                                 {item.name}
                                             </button>
                                         </li>

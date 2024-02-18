@@ -8,7 +8,7 @@ import { showAlert } from '../store/alertSlice.js'
 import { removePost } from '../store/postSlice.js'
 
 const PostCard = ({
-  $id, title, featuredImage, content, status, slug, userId
+  $id, title, featuredImage, content, status, userId 
 }) => {
   const [loading, setloading] = useState(false);
   const dispatch = useDispatch();
@@ -50,7 +50,7 @@ const PostCard = ({
 
   useEffect(() => {
     const handleOutClick = (e) => {
-      if (!e.target.closest(`.${$id}`)) {
+      if (!e.target.closest(`.class${$id}`)) {
         setshowOption(false);
       } else {
         setshowOption((prev) => !prev);
@@ -76,7 +76,7 @@ const PostCard = ({
         </div>
       }
       <div className='bg-gray-900 overflow-hidden rounded-3xl'>
-        <div className={`${$id} status ${status === "active" ? 'bg-green-400' : "bg-red-600"} text-black p-4 flex justify-center items-center border-black border-[3px] rounded-full absolute top-1 right-1 z-[99]`}>
+        <div className={`${"class"+$id} status ${status === "active" ? 'bg-green-400' : "bg-red-600"} text-black p-4 flex justify-center items-center border-black border-[3px] rounded-full absolute top-1 right-1 z-[99]`}>
         </div>
 
         {

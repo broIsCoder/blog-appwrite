@@ -13,7 +13,7 @@ const Post = () => {
   const [loading, setloading] = useState(false);
 
   const [post, setpost] = useState(null);
-  const { slug } = useParams();
+  const { postId } = useParams();
   const userData = useSelector((state) => state.auth.userData);
 
   const isAuthor = post && userData ? post.userId === userData.$id : false;
@@ -49,8 +49,8 @@ const Post = () => {
   }
 
   useEffect(() => {
-    if (slug) {
-      appwriteServcie.getPost(slug).then((post) => {
+    if (postId) {
+      appwriteServcie.getPost(postId).then((post) => {
         if (post) {
           setpost(post);
         }
@@ -59,7 +59,7 @@ const Post = () => {
         }
       })
     }
-  }, [slug])
+  }, [postId])
 
   return post ? (
     <div className='w-full relative sm:h-[670px] flex gap-2 sm:gap-2 ms:gap-10 flex-col justify-center items-center sm:flex-row bg-secondary p-2 ms:p-10'>

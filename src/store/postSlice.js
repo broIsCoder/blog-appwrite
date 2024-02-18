@@ -12,16 +12,15 @@ const postSlice = createSlice({
     storePosts(state, action) {
       state.postList = action.payload;
     },
-    toggleLoading(state , action) {
+    toggleLoading(state, action) {
       state.loadingPosts = action.payload;
     },
     removePost(state, action) {
       const postId = action.payload;
-      state.postList = state.postList.filter(post => post.$id !== postId);
-      console.log("After Deleting :",state.postList)
+      state.postList = state.postList.filter((post) => post.$id !== postId);
     },
   },
 });
 
-export const { storePosts , toggleLoading ,removePost} = postSlice.actions;
+export const { storePosts, toggleLoading, removePost } = postSlice.actions;
 export default postSlice.reducer;
