@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';   //Using hookForm to reduce no.of states
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useId } from 'react';
 import Button from '../Button';
 import Input from '../Input';
 import PostEditor from '../PostEditor';
@@ -28,6 +28,8 @@ const PostForm = ({ post }) => {
     const { register, handleSubmit, setValue, watch, control, formState: { errors }, } = useForm();
 
     const submit = async (data) => {
+        
+        console.log("Submitted Data:",data);
         try {
             setloading(true);
             // If `post` exists, update the existing post.

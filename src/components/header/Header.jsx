@@ -51,7 +51,7 @@ const Header = () => {
     }, []);
 
     return (
-        <header className='p-1 bg-gray-900 relative'>
+        <header className='p-2 bg-gray-900 relative'>
             <div className='w-full max-w-2xl mx-auto'>
                 <nav className={`flex items-center ${!authStatus ? 'justify-center' : 'justify-between'}`}>
                     <div className="mr-4">
@@ -67,7 +67,7 @@ const Header = () => {
 
                     {authStatus &&
                         <>
-                            <ul className={`hidden sm:flex pc navList w-100 ml-auto p-2 h-auto overflow-hidden rounded-2xl`}>
+                            <ul className={`hidden sm:flex pc navList w-100 ml-auto h-auto overflow-hidden rounded-2xl`}>
                                 {navItems.map((item) =>
                                     item.active ? (
                                         <li key={item.name}>
@@ -81,7 +81,7 @@ const Header = () => {
                                     <LogoutBtn classname='rounded-xl' />
                                 </li>
                             </ul>
-                            <ul className={`mobile navList z-[100] w-100 flex sm:hidden flex-col absolute h-auto top-14 right-0 p-2 duration-200 ${showNavList ? "" : 'transform translate-x-[100%] p-0'} overflow-hidden bg-gray-900 rounded-l-xl`}>
+                            <ul className={`mobile navList z-[100] w-100 flex sm:hidden flex-col absolute h-auto top-16 right-0 p-2 duration-200 ${showNavList ? "" : 'transform translate-x-[100%] p-0'} overflow-hidden bg-gray-900 rounded-l-xl`}>
                                 {navItems.map((item) =>
                                     item.active ? (
                                         <li key={item.name}>
