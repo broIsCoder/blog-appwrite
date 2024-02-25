@@ -9,13 +9,14 @@ import authService from '../appwrite/auth'
 import { login } from '../store/authSlice'
 import Container from './container/Container';
 import { showAlert, hideAlert } from '../store/alertSlice';
+import Footer from './footer/Footer';
 
 const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    authService.dispatch = dispatch ;
+    authService.dispatch = dispatch;
 
-    const { register, handleSubmit } = useForm();     // used to register and submit input data
+    const { register, handleSubmit ,formState:{errors}} = useForm();     // used to register and submit input data
     const loading = useSelector((state) => state.auth.loading)
     const userData = useSelector((state) => state.auth.userData)
 
@@ -33,14 +34,14 @@ const Login = () => {
             if (userLogin) {
                 const user = await authService.getCurrentUser();
                 if (user) {
-                    dispatch(login({userData:user}));
+                    dispatch(login({ userData: user }));
                     navigate('/')
                     dispatch(showAlert({
                         message: "You are logged in",
                         type: "success"
                     }));
                 }
-            }else{
+            } else {
                 dispatch(showAlert({
                     message: "Login Failed . Try again",
                     type: "warning"
@@ -55,11 +56,21 @@ const Login = () => {
     }
 
     return (
-        <Container className={'flex items-center justify-center'} backgroundImage={'/loginBg.svg'}>
+        <Container className={"flex flex-col justify-between"} backgroundImage={'/loginBg.svg'}>
+           <div className='flex items-center justify-center p-16'>
+
             <form onSubmit={handleSubmit(loginAccount)} className='bg-gray-900 p-3 rounded-xl sm:rounded-3xl h-100 w-100'>
                 {/* Registering input fields on hookform */}
-                <Input label="Email" type="email" ref={emailRef} {...register("email", { required: true })} />
-                <Input label="Password" type="password" ref={passwordRef} {...register("password", { required: true })} />
+                <Input label="Email" type="email" ref={emailRef} {...register("email", { required: true})} />
+                {errors.email && <div className='text-red-600'>{errors.email.message}</div>}
+                
+                <Input label="Password" type="password" ref={passwordRef} {...register("password", { required: true  ,
+                minLength:{
+                    value :8 , message:"Minimum length is 8"
+                },maxLength:{
+                    value:25, message:"Maximum length is 25"
+                }})} />
+                {errors.password && <div className='text-red-600'>{errors.password.message}</div>}
 
                 <div className='flex flex-col justify-between items-center py-3 h-100'>
                     <Button type='submit' classname='mx-0' bgColor='bg-green-700'>Log in</Button>
@@ -69,6 +80,9 @@ const Login = () => {
                     </p>
                 </div>
             </form>
+            
+                </div>
+<Footer/>
         </Container >
     )
 }

@@ -40,19 +40,19 @@ function App() {
   }, [])
 
   return (
-    <div className='relative overflow-hidden'>
+    <div className='relative'>
       <InfoAlert show={infoShow} />
       <Alert show={show} />
       {!loading ?
         <div className='flex flex-wrap content-between bg-black text-white'>
           <div className='w-full min-h-screen flex flex-col'>
             <Header />
-            <main className='w-full min-h-full'>
+            <main className='w-full h-full'>
               <Outlet />
             </main>
           </div>
           <div className="w-full block">
-            <Footer />
+            {/* <Footer /> */}
           </div>
         </div>
         :

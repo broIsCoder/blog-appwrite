@@ -131,15 +131,7 @@ const PostForm = ({ post }) => {
         }
     }, [post]);
 
-    useEffect(() => {
-        if (!post) {
-            dispatch(showInfoAlert(
-                {
-                    message: "Please Fill Every Field"
-                }
-            ));
-        }
-    }, [])
+
     // OPTIONAL CODE FOR setting value of postId when change in title
 
     // useEffect(() => {
@@ -161,17 +153,38 @@ const PostForm = ({ post }) => {
                         <Loading />
                     </div>
                 }
+                <li className='absolute top-1 right-1 flex flex-col gap-2 max-w-1/2'>
+
+
+
+                </li>
+
                 <form onSubmit={handleSubmit(submit)} className="flex flex-col gap-2 sm:flex-row p-2">
                     <div className='flex flex-col gap-2 justify-start w-full sm:w-2/3 bg-green-380'>
                         <div className='flex gap-2 flex-col ss:flex-row'>
+
                             <Input
                                 type="text"
                                 placeholder="Title"
                                 defaultvalues={post?.title || ''}
-                                {...register("title", { required: true })}
+                                {...register("title", {
+                                    required: true,
+                                    minLength: {
+                                        value: 3, message: "Minimum value is 3"
+                                    }, maxLength: {
+                                        value: 255, message: "Maximum value is 255"
+                                    }
+                                })}
 
                             />
+                            {
+                                errors.title &&
+                                <span className='text-red-600'>{errors.title.message}</span>
+                            }
+
+
                         </div>
+
 
 
                         <textarea
@@ -180,8 +193,19 @@ const PostForm = ({ post }) => {
                             className='text-black p-2 rounded-xl min-h-32 sm:min-h-96'
                             name="content"
                             defaultvalues={post?.content || ""}
-                            {...register("content", { required: true })}
+                            {...register("content", {
+                                required: true,
+                                minLength: {
+                                    value: 3, message: "Minimum value is 3"
+                                }, maxLength: {
+                                    value: 100000, message: "Maximum value is 100000"
+                                }
+                            })}
                         ></textarea>
+                        {
+                            errors.content &&
+                            <span className='text-red-600'>{errors.content.message}</span>
+                        }
                     </div>
 
                     <div className=' flex sm:flex-col flex-col gap-2 w-full sm:w-1/3 h-full justify-end items-end'>
@@ -200,7 +224,7 @@ const PostForm = ({ post }) => {
 
                                         ) :
                                         (
-                                            <p className='text-xl font-bold min-h-[380px] max-h-[380px] flex justify-center items-center'>Choose an image</p>
+                                            <p className='text-xl font-bold min-h-[380px] max-h-[380px] flex justify-center items-center'>Preview here</p>
 
                                         )
                             }
@@ -208,7 +232,7 @@ const PostForm = ({ post }) => {
 
 
                         <div className='flex items-center justify-center flex-col w-full gap-2'>
-
+                            {!post && <p >Choose a image *</p>}
                             <Input
                                 type="file"
                                 {...register("featuredImage", { required: !post })}
@@ -220,6 +244,7 @@ const PostForm = ({ post }) => {
                                     handleFileChange(e);
                                 }}
                             />
+
                             <Select
                                 options={["active", "inactive"]}
                                 defaultvalues={post?.status || "active"}

@@ -21,7 +21,7 @@ const AllPost = () => {
   const renderContent = () => {
     if (loadingPosts) {
       return (
-        <div className='w-full h-screen bg-secondary flex justify-center items-center'>
+        <div className='w-full h-full bg-secondary flex justify-center items-center'>
           <Loading />
         </div>
       );
