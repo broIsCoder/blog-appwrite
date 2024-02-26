@@ -10,29 +10,27 @@ const Home = () => {
   const user = useSelector((state) => state.auth.userData);
 
   return (
-    <Container className='flex flex-col justify-between' backgroundImage={'/homeBg.svg'}>
-      <div className='flex flex-col items-center sm:justify-center'>
-        {
-          authStatus ?
-            <marquee behavior="" direction="lef-to-right" className='text-4xl font-bold sm:text-8xl h-12 sm:h-32 my-7'>Welcome back ! {user.name}</marquee>
-            :
-            <marquee behavior="" direction="lef-to-right" className='text-4xl font-bold sm:text-8xl h-12 sm:h-32 my-7'>Welcome to Youtube Blogs</marquee>
-        }
-        <p className='text-2xl mx-[20px] mb-2'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi odio maxime quod numquam cupiditate quam, consectetur sint ipsam illo. Veritatis molestias magni eius?</p>
+    <Container className='flex flex-col' backgroundImage={'/homeBg.svg'}>
+      <div className='flex flex-col items-center py-2 h-[90vh] ss:h-auto'>
+
+        <marquee behavior="" direction="lef-to-right" className='text-5xl font-bold ms:text-8xl h-[70px] ms:h-[170px]'>Welcome{authStatus ? ` back ! ${user.name}` : " to Youtube Blogs"}</marquee>
+        <p className='text-2xl px-4'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi odio maxime quod numquam cupiditate quam, consectetur sint ipsam illo. Veritatis molestias magni eius?</p>
         {!authStatus ?
-          <div className='flex gap-4'>
-            <Link to="/login" className=' text-black font-bold px-4 py-1 bg-blue-400 rounded-xl'>Log in</Link>
-            <Link to="/signup" className=' text-black font-bold px-4 py-1 bg-green-500 rounded-xl'>Sign up</Link>
+          <div className='flex gap-4 mt-24 ss:mt-10'>
+            <Link to="/login" className=' text-white font-bold px-6 py-2 sm:py-4 sm:px-7 bg-blue-500 rounded-xl'>Log in</Link>
+            <Link to="/signup" className=' text-white font-bold px-6 py-2 sm:py-4 sm:px-7 bg-green-500 rounded-xl'>Sign up</Link>
           </div>
           :
-          <div className='flex flex-col xxs:flex-row items-center gap-2 bg-gray-900 p-2 rounded-xl'>
+          <div className='flex flex-col xxs:flex-row items-center gap-2 bg-gray-900 p-2 rounded-xl mt-10'>
             <p className='font-bold'>
               {user?.email}
             </p>
           </div>
         }
       </div>
-      <Footer />
+      <div className='h-full flex flex-col justify-end w-full'>
+        <Footer />
+      </div>
 
     </Container>
   )

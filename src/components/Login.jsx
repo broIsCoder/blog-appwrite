@@ -56,25 +56,25 @@ const Login = () => {
     }
 
     return (
-        <Container className={"flex flex-col justify-between"} backgroundImage={'/loginBg.svg'}>
-           <div className='flex items-center justify-center p-16'>
+        <Container className={"flex flex-col"}>
+           <div className='flex items-center justify-center bg-cover bg-center bg-no-repeat h-[90vh]' style={{backgroundImage:"url('/loginBg.svg')"}}>
 
-            <form onSubmit={handleSubmit(loginAccount)} className='bg-gray-900 p-3 rounded-xl sm:rounded-3xl h-100 w-100'>
+            <form onSubmit={handleSubmit(loginAccount)} className='bg-gray-800 p-3 rounded-xl sm:rounded-3xl h-100 w-100'>
                 {/* Registering input fields on hookform */}
-                <Input label="Email" type="email" ref={emailRef} {...register("email", { required: true})} />
+                <Input label="Email" type="email"  className="p-2 border-transparent border-4 focus:border-blue-400" ref={emailRef} {...register("email", { required: true})} />
                 {errors.email && <div className='text-red-600'>{errors.email.message}</div>}
                 
-                <Input label="Password" type="password" ref={passwordRef} {...register("password", { required: true  ,
+                <Input label="Password" type="password"  className="p-2 border-transparent border-4 focus:border-blue-400" ref={passwordRef} {...register("password", { required: true  ,
                 minLength:{
-                    value :8 , message:"Minimum length is 8"
+                    value :8 , message:"must be atleast of 8 characters"
                 },maxLength:{
-                    value:25, message:"Maximum length is 25"
+                    value:25, message:"must be atmost of 25 characters"
                 }})} />
                 {errors.password && <div className='text-red-600'>{errors.password.message}</div>}
 
                 <div className='flex flex-col justify-between items-center py-3 h-100'>
                     <Button type='submit' classname='mx-0' bgColor='bg-green-700'>Log in</Button>
-                    <p>
+                    <p className='mt-3'>
                         Don&apos;t have any account?&nbsp;
                         <Link to="/signup" className=' text-blue-500 underline'>Sign up</Link>
                     </p>

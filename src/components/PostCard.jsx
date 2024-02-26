@@ -64,7 +64,7 @@ const PostCard = ({
   })
 
   return (
-    <div className='relative hover:opacity-70 transition duration-300  rounded-3xl'>
+    <div className='relative hover:opacity-70 transition duration-300 rounded-3xl overflow-x-hidden'>
 
       {
         loading &&
@@ -82,7 +82,7 @@ const PostCard = ({
         {
           isAuthor &&
           
-          <div className={`absolute list-none right-0 top-12 py-2 rounded-2xl bg-gray-900 cursor-pointer border-[2px] overflow-hidden duration-300 ${showOption ? '' : 'transform translate-x-[100%] opacity-0'}`}>
+          <div className={`absolute list-none right-0 top-12 py-2 rounded-l-2xl bg-gray-900 cursor-pointer overflow-hidden duration-300 ${showOption ? '' : 'transform translate-x-[100%] opacity-0'}`}>
 
             <Link to={`/edit-post/${$id}`} className='hover:bg-gray-500 duration-300 px-5 py-1 flex justify-center text-lg'>
               Edit

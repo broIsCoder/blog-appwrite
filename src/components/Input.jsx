@@ -3,7 +3,7 @@ import React, { useId } from 'react'
 const Input = React.forwardRef(function Input({
     label,
     type = 'text',
-    className = "px-3 py-2  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent",
+    className = "p-2 border-4 border-transparent focus:border-blue-400",
     ...props },
     ref) {
     const id = useId();

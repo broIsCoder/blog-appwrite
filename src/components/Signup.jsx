@@ -53,33 +53,33 @@ const Signup = () => {
     }
 
     return (
-        <Container className={'flex flex-col justify-between'} backgroundImage={'/signupBg.svg'}>
-            <div className='flex items-center justify-center bg-center p-8'>
-            <form onSubmit={handleSubmit(submit)} className='bg-gray-900 p-3 rounded-xl sm:rounded-3xl h-100 w-100 relative'>
+        <Container className={'flex flex-col justify-between'}>
+            <div className='flex items-center justify-center bg-cover bg-center bg-no-repeat h-[90vh]' style={{backgroundImage:"url('/signupBg.svg')"}}>
+            <form onSubmit={handleSubmit(submit)} className='bg-gray-800 p-3 rounded-xl sm:rounded-3xl h-100 w-100 relative'>
                 {/* Registering input fields on hookform */}
-                <Input label="User Name" type="text" ref={userNameRef} {...register("username", { required: true ,
+                <Input label="User Name" type="text" className="p-2 border-transparent border-4 focus:border-blue-400" ref={userNameRef} {...register("username", { required: true ,
                 minLength:{
-                    value :3 , message:"Minimum value is 3"
+                    value :3 , message:"must be atleast of 3 characters"
                 },maxLength:{
-                    value:25, message:"Maximum value is 25"
+                    value:25, message:"must be atmost of 25 characters"
                 } 
                 })} />
                 {errors.username && <span className='text-red-600'>{errors.username.message}</span>}
 
-                <Input label="Email" type="email" ref={emailRef} {...register("email", { required: true })} />
+                <Input label="Email" type="email" className="p-2 border-transparent border-4 focus:border-blue-400" ref={emailRef} {...register("email", { required: true })} />
                 {errors.email && <span className='text-red-600'>{errors.email.message}</span>}
 
-                <Input label="Password" type="password" ref={passwordRef} {...register("password", { required: true ,
+                <Input label="Password" type="password" className="p-2 border-transparent border-4 focus:border-blue-400" ref={passwordRef} {...register("password", { required: true ,
                 minLength:{
-                    value :8 , message:"Minimum value is 8"
+                    value :8 , message:"must be atleast of 8 characters"
                 },maxLength:{
-                    value:25, message:"Maximum value is 25"
+                    value:25, message:"must be atmost of 25 characters"
                 } })} />
                 {errors.password && <span className='text-red-600'>{errors.password.message}</span>}
 
                 <div className='flex flex-col justify-between items-center py-3'>
                     <Button type='submit' classname='mx-0' bgColor='bg-green-700'>Sign up</Button>
-                    <p>
+                    <p className='mt-3'>
                         Already have an account ?&nbsp;
                         <Link to="/login" className=' text-blue-500 underline'>Log in</Link>
                     </p>

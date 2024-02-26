@@ -146,115 +146,110 @@ const PostForm = ({ post }) => {
 
     return (
         <Container className="">
-            <div className='relativee'>
+            <div className='relative h-full w-full'>
 
                 {loading &&
                     <div className='absolute w-full h-full z-[99] bg-black opacity-80'>
                         <Loading />
                     </div>
                 }
-                <li className='absolute top-1 right-1 flex flex-col gap-2 max-w-1/2'>
 
+                <form onSubmit={handleSubmit(submit)} className="flex flex-col justify-center gap-2 h-full sm:flex-row p-2">
+                    <div className='flex flex-col justify-start h-full w-full sm:w-2/3'>
+                        <div className='h-full w-full flex gap-2 flex-col ss:flex-row'>
+                            <div className=' h-full w-full flex flex-col'>
+                                <span className='text-red-600'>Title {errors.title && errors.title.message}</span>
+                                <Input
+                                    type="text"
+                                    placeholder="Title"
+                                    defaultvalues={post?.title || ''}
+                                    {...register("title", {
+                                        required: true,
+                                        minLength: {
+                                            value: 3, message: "must be atleast of 3 characters"
+                                        }, maxLength: {
+                                            value: 255, message: "must be atmost of 255 characters"
+                                        }
+                                    })}
 
+                                />
+                            </div>
+                        </div>
 
-                </li>
-
-                <form onSubmit={handleSubmit(submit)} className="flex flex-col gap-2 sm:flex-row p-2">
-                    <div className='flex flex-col gap-2 justify-start w-full sm:w-2/3 bg-green-380'>
-                        <div className='flex gap-2 flex-col ss:flex-row'>
-
-                            <Input
-                                type="text"
-                                placeholder="Title"
-                                defaultvalues={post?.title || ''}
-                                {...register("title", {
+                        <div className='flex flex-col h-full w-full'>
+                            <span className='text-red-600'>Content {errors.content && errors.content.message}</span>
+                            <textarea
+                                cols="30"
+                                rows="19"
+                                className='text-white p-2 rounded-xl h-full bg-gray-700 border-4 border-transparent focus:border-blue-400 resize-none'
+                                name="content"
+                                defaultvalues={post?.content || ""}
+                                {...register("content", {
                                     required: true,
                                     minLength: {
-                                        value: 3, message: "Minimum value is 3"
+                                        value: 3, message: "must be atleast of characters"
                                     }, maxLength: {
-                                        value: 255, message: "Maximum value is 255"
+                                        value: 100000, message: "must be atmost of 100000 characters"
                                     }
                                 })}
-
-                            />
-                            {
-                                errors.title &&
-                                <span className='text-red-600'>{errors.title.message}</span>
-                            }
-
+                            ></textarea>
 
                         </div>
-
-
-
-                        <textarea
-                            cols="30"
-                            rows="10"
-                            className='text-black p-2 rounded-xl min-h-32 sm:min-h-96'
-                            name="content"
-                            defaultvalues={post?.content || ""}
-                            {...register("content", {
-                                required: true,
-                                minLength: {
-                                    value: 3, message: "Minimum value is 3"
-                                }, maxLength: {
-                                    value: 100000, message: "Maximum value is 100000"
-                                }
-                            })}
-                        ></textarea>
-                        {
-                            errors.content &&
-                            <span className='text-red-600'>{errors.content.message}</span>
-                        }
                     </div>
 
-                    <div className=' flex sm:flex-col flex-col gap-2 w-full sm:w-1/3 h-full justify-end items-end'>
-                        <div className='bg-black w-full flex flex-col gap-2'>
-                            {
-                                post ?
-                                    (
-                                        <img src={previewImage || appwriteService.getFilePreview(post?.featuredImage)} className='min-h-[380px] max-h-[380px] ' alt="Preview" style={{ objectFit: 'contain', objectPosition: "center" }} />
-                                    )
+                    <div className=' flex sm:flex-col flex-col gap-2 w-full justify-between sm:w-1/3 h-full pb-2'>
+                        <div className='gap-2 flex flex-col'>
 
-                                    :
-
-                                    previewImage ?
+                            <div className="flex flex-col">
+                                <span className='text-red-600'>Image {errors.featuredImage && errors.featuredImage.message}</span>
+                                <Input
+                                    type="file"
+                                    {...register("featuredImage", {
+                                        required: {
+                                            value: !post,
+                                            message: "must be Choose a Image"
+                                        }
+                                    })}
+                                    defaultvaluess={post?.featuredImage || null}
+                                    accept="image/png, image/jpeg, image/jpg"
+                                    placeholder="Choose"
+                                    onChange={(e) => {
+                                        handleFileChange(e);
+                                    }}
+                                />
+                            </div>
+                            <div className='bg-black w-full flex flex-col gap-2 rounded-lg'>
+                                {
+                                    post ?
                                         (
-                                            <img src={previewImage} alt="Preview" className=' min-h-[380px] max-h-[380px] ' style={{ objectFit: 'contain', objectPosition: "center" }} />
-
-                                        ) :
-                                        (
-                                            <p className='text-xl font-bold min-h-[380px] max-h-[380px] flex justify-center items-center'>Preview here</p>
-
+                                            <img src={previewImage || appwriteService.getFilePreview(post?.featuredImage)} className='min-h-[380px] max-h-[380px] ' alt="Preview" style={{ objectFit: 'contain', objectPosition: "center" }} />
                                         )
-                            }
-                        </div>
 
+                                        :
 
-                        <div className='flex items-center justify-center flex-col w-full gap-2'>
-                            {!post && <p >Choose a image *</p>}
-                            <Input
-                                type="file"
-                                {...register("featuredImage", { required: !post })}
-                                defaultvaluess={post?.featuredImage || null}
-                                accept="image/png, image/jpeg, image/jpg"
-                                placeholder="Choose"
-                                className="w-full p-1.5 text-white border border-gray-300 rounded-lg"
-                                onChange={(e) => {
-                                    handleFileChange(e);
-                                }}
-                            />
+                                        previewImage ?
+                                            (
+                                                <img src={previewImage} alt="Preview" className=' min-h-[380px] max-h-[380px] ' style={{ objectFit: 'contain', objectPosition: "center" }} />
 
+                                            ) :
+                                            (
+                                                <p className='text-xl font-bold min-h-[380px] max-h-[380px] flex justify-center items-center'>Image Preview</p>
+
+                                            )
+                                }
+                            </div>
                             <Select
+                                className="p-2 border-4 border-transparent focus:border-blue-400"
                                 options={["active", "inactive"]}
                                 defaultvalues={post?.status || "active"}
                                 {...register("status", { required: true })}
                             />
-                            <Button type='submit' classname={`bg-blue-500 p-2`}  >
-                                {post ? "Update" : "Add as New"}
-                            </Button>
-
                         </div>
+
+                        <Button type='submit' classname={`bg-blue-500 p-2 `}  >
+                            {post ? "Update" : "Add as New"}
+                        </Button>
+
                     </div>
                 </form>
             </div>

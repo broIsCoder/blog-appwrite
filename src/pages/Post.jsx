@@ -87,9 +87,9 @@ const Post = () => {
             )}
           </div>
         </div>
-        <div className='sm:h-full h-full sm:w-1/2 w-full overflow-y-auto p-3 bg-white rounded-xl flex flex-col'>
-          <h1 className='text-3xl font-bold mb-6 text-black break-words'>{post.title}</h1>
-          <div className='text-black break-words overflow-auto '>
+        <div className='sm:h-full h-full sm:w-1/2 w-full overflow-y-auto p-3 bg-gray-900 rounded-xl flex flex-col'>
+          <h1 className='text-3xl font-bold mb-6 text-white break-words'>{post.title}</h1>
+          <div className='text-white break-words overflow-auto '>
             {post.content}
           </div>
         </div>
