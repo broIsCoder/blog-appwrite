@@ -16,7 +16,11 @@ const Login = () => {
     const dispatch = useDispatch();
     authService.dispatch = dispatch;
 
-    const { register, handleSubmit ,formState:{errors}} = useForm();     // used to register and submit input data
+    const { register, handleSubmit, formState: { errors } } = useForm();     // used to register and submit input data
+    
+    const [showPassword, setshowPassword] = useState(false);
+    const [submitted, setsubmitted] = useState(false);
+
     const loading = useSelector((state) => state.auth.loading)
     const userData = useSelector((state) => state.auth.userData)
 
@@ -52,37 +56,46 @@ const Login = () => {
                 message: error.message,
                 type: "error"
             }));
+        }
+        finally {
+            setsubmitted(true);
         };
     }
 
     return (
         <Container className={"flex flex-col"}>
-           <div className='flex items-center justify-center bg-cover bg-center bg-no-repeat h-[90vh]' style={{backgroundImage:"url('/loginBg.svg')"}}>
+            <div className='flex items-center justify-center bg-cover bg-center bg-no-repeat h-[90vh]' style={{ backgroundImage: "url('/loginBg.svg')" }}>
 
-            <form onSubmit={handleSubmit(loginAccount)} className='bg-gray-800 p-3 rounded-xl sm:rounded-3xl h-100 w-100'>
-                {/* Registering input fields on hookform */}
-                <Input label="Email" type="email"  className="p-2 border-transparent border-4 focus:border-blue-400" ref={emailRef} {...register("email", { required: true})} />
-                {errors.email && <div className='text-red-600'>{errors.email.message}</div>}
-                
-                <Input label="Password" type="password"  className="p-2 border-transparent border-4 focus:border-blue-400" ref={passwordRef} {...register("password", { required: true  ,
-                minLength:{
-                    value :8 , message:"must be atleast of 8 characters"
-                },maxLength:{
-                    value:25, message:"must be atmost of 25 characters"
-                }})} />
-                {errors.password && <div className='text-red-600'>{errors.password.message}</div>}
+                <form onSubmit={handleSubmit(loginAccount)} className='bg-gray-800 p-3 rounded-xl sm:rounded-3xl h-100 w-100'>
+                    {/* Registering input fields on hookform */}
+                    <Input label="Email" type="email" className="p-2 border-transparent border-4 focus:border-blue-400" ref={emailRef} {...register("email", { required: true })} />
+                    {errors.email && <div className='text-red-600'>{errors.email.message}</div>}
 
-                <div className='flex flex-col justify-between items-center py-3 h-100'>
-                    <Button type='submit' classname='mx-0' bgColor='bg-green-700'>Log in</Button>
-                    <p className='mt-3'>
-                        Don&apos;t have any account?&nbsp;
-                        <Link to="/signup" className=' text-blue-500 underline'>Sign up</Link>
-                    </p>
-                </div>
-            </form>
-            
-                </div>
-<Footer/>
+                    <div className='relative'>
+                        <button type='button' onClick={() => {setshowPassword((prev) => !prev);}} className='text-red-600 font-extrabold absolute top-0 right-2'> {showPassword ? 'hide' : 'show'}</button>
+
+                        <Input label="Password" type={showPassword ? "text" : "password"} className="p-2 border-transparent border-4 focus:border-blue-400" ref={passwordRef} {...register("password", {
+                            required: true,
+                            minLength: {
+                                value: 8, message: "must be atleast of 8 characters"
+                            }, maxLength: {
+                                value: 25, message: "must be atmost of 25 characters"
+                            }
+                        })} />
+                    </div>
+                    {errors.password && <div className='text-red-600'>{errors.password.message}</div>}
+
+                    <div className='flex flex-col justify-between items-center py-3 h-100'>
+                        <Button type='submit' disabled={submitted} classname='mx-0' bgColor='bg-green-700'>Log in</Button>
+                        <p className='mt-3'>
+                            Don&apos;t have any account?&nbsp;
+                            <Link to="/signup" className=' text-blue-500 underline'>Sign up</Link>
+                        </p>
+                    </div>
+                </form>
+
+            </div>
+            <Footer />
         </Container >
     )
 }

@@ -207,7 +207,7 @@ const PostForm = ({ post }) => {
                                     {...register("featuredImage", {
                                         required: {
                                             value: !post,
-                                            message: "must be Choose a Image"
+                                            message: "must be choosen"
                                         }
                                     })}
                                     defaultvaluess={post?.featuredImage || null}

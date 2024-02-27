@@ -8,7 +8,7 @@ import authService from '../appwrite/auth'
 import { login } from '../store/authSlice'
 import Container from './container/Container';
 import { showAlert, hideAlert } from '../store/alertSlice';
-import {Footer} from '../components'
+import { Footer } from '../components'
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -19,9 +19,12 @@ const Signup = () => {
     const userNameRef = useRef(null);
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
-    const user = useSelector((state) => state.auth.userSignUp)
+    const [showPassword, setshowPassword] = useState(false);
+    const [submitted, setsubmitted] = useState(false);
+    const user = useSelector((state) => state.auth.userSignUp);
 
     const submit = async (data) => {
+        setsubmitted(true);
         try {
             dispatch(showAlert({
                 message: "Signing Up",
@@ -49,44 +52,52 @@ const Signup = () => {
                 message: error.message,
                 type: "error"
             }));
+        } finally {
+            setsubmitted(true);
         }
     }
 
     return (
         <Container className={'flex flex-col justify-between'}>
-            <div className='flex items-center justify-center bg-cover bg-center bg-no-repeat h-[90vh]' style={{backgroundImage:"url('/signupBg.svg')"}}>
-            <form onSubmit={handleSubmit(submit)} className='bg-gray-800 p-3 rounded-xl sm:rounded-3xl h-100 w-100 relative'>
-                {/* Registering input fields on hookform */}
-                <Input label="User Name" type="text" className="p-2 border-transparent border-4 focus:border-blue-400" ref={userNameRef} {...register("username", { required: true ,
-                minLength:{
-                    value :3 , message:"must be atleast of 3 characters"
-                },maxLength:{
-                    value:25, message:"must be atmost of 25 characters"
-                } 
-                })} />
-                {errors.username && <span className='text-red-600'>{errors.username.message}</span>}
+            <div className='flex items-center justify-center bg-cover bg-center bg-no-repeat h-[90vh]' style={{ backgroundImage: "url('/signupBg.svg')" }}>
+                <form onSubmit={handleSubmit(submit)} className='bg-gray-800 p-3 rounded-xl sm:rounded-3xl h-100 w-100 relative'>
+                    {/* Registering input fields on hookform */}
+                    <Input label="User Name" type="text" className="p-2 border-transparent border-4 focus:border-blue-400" ref={userNameRef} {...register("username", {
+                        required: true,
+                        minLength: {
+                            value: 3, message: "must be atleast of 3 characters"
+                        }, maxLength: {
+                            value: 25, message: "must be atmost of 25 characters"
+                        }
+                    })} />
+                    {errors.username && <span className='text-red-600'>{errors.username.message}</span>}
 
-                <Input label="Email" type="email" className="p-2 border-transparent border-4 focus:border-blue-400" ref={emailRef} {...register("email", { required: true })} />
-                {errors.email && <span className='text-red-600'>{errors.email.message}</span>}
+                    <Input label="Email" type="email" className="p-2 border-transparent border-4 focus:border-blue-400" ref={emailRef} {...register("email", { required: true })} />
+                    {errors.email && <span className='text-red-600'>{errors.email.message}</span>}
 
-                <Input label="Password" type="password" className="p-2 border-transparent border-4 focus:border-blue-400" ref={passwordRef} {...register("password", { required: true ,
-                minLength:{
-                    value :8 , message:"must be atleast of 8 characters"
-                },maxLength:{
-                    value:25, message:"must be atmost of 25 characters"
-                } })} />
-                {errors.password && <span className='text-red-600'>{errors.password.message}</span>}
+                    <div className='relative'>
+                        <button type='button' onClick={() => { setshowPassword((prev) => !prev); passwordRef.current.focus() }} className='text-red-600 font-extrabold absolute top-0 right-2'> {showPassword ? 'hide' : 'show'}</button>
+                        <Input label="Password" type={showPassword ? "text" : "password"} className="p-2 border-transparent border-4 focus:border-blue-400" ref={passwordRef} {...register("password", {
+                            required: true,
+                            minLength: {
+                                value: 8, message: "must be atleast of 8 characters"
+                            }, maxLength: {
+                                value: 25, message: "must be atmost of 25 characters"
+                            }
+                        })} />
+                    </div>
+                    {errors.password && <span className='text-red-600'>{errors.password.message}</span>}
 
-                <div className='flex flex-col justify-between items-center py-3'>
-                    <Button type='submit' classname='mx-0' bgColor='bg-green-700'>Sign up</Button>
-                    <p className='mt-3'>
-                        Already have an account ?&nbsp;
-                        <Link to="/login" className=' text-blue-500 underline'>Log in</Link>
-                    </p>
-                </div>
-            </form>
+                    <div className='flex flex-col justify-between items-center py-3'>
+                        <Button type='submit' disabled={submitted} classname='mx-0' bgColor='bg-green-700'>Sign up</Button>
+                        <p className='mt-3'>
+                            Already have an account ?&nbsp;
+                            <Link to="/login" className=' text-blue-500 underline'>Log in</Link>
+                        </p>
+                    </div>
+                </form>
             </div>
-            <Footer/>
+            <Footer />
         </Container >
     )
 }

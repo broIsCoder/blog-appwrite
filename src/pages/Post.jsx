@@ -54,6 +54,7 @@ const Post = () => {
       appwriteServcie.getPost(postId).then((post) => {
         if (post) {
           setpost(post);
+          console.log("Post ; ", post)
         }
         else {
           navigate('/all-posts');
