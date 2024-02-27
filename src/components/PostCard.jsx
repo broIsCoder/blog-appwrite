@@ -93,10 +93,9 @@ const PostCard = ({
           </div>
         }
         <Link to={`/post/${$id}`}>
-        
           <img src={appwriteService.getFilePreview(featuredImage)} alt={title} className='w-full min-h-[150px] max-h-[300px] sm:min-h-[250px] sm:max-h-[400px] xl:h-auto sm:object-contain object-cover sm:object-center' />
           <div className='p-3 pt-1'>
-            <div className='font-bold text-xl overflow-hidden line-clamp-1'>{title}</div>
+            <div className='font-bold text-xl break-words line-clamp-1 overflow-hidden text-ellipsis'>{title}</div>
           </div>
         </Link>
       </div>
