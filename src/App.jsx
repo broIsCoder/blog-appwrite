@@ -40,23 +40,21 @@ function App() {
   }, [])
 
   return (
-    <div className='relative'>
+    <div className='relative h-[100dvh] text-white min-h-[100dvh] flex flex-col bg-blue-500'>
       <InfoAlert show={infoShow} />
       <Alert show={show} />
       {!loading ?
-        <div className='flex flex-wrap content-between bg-black text-white'>
-          <div className='w-full min-h-screen flex flex-col'>
+        // <div className='flex flex-col h-full content-between bg-red text-white'>
+            <div className='h-full bg-yellow-500 flex flex-col'>
             <Header />
-            <main className='w-full h-full'>
+            <main className='w-full mt-14 flex flex-1 bg-purple-900'>
               <Outlet />
-            </main>
-          </div>
-          <div className="w-full block">
-            {/* <Footer /> */}
-          </div>
-        </div>
+              </main>
+            </div>
+          
+        // </div>
         :
-        <div className="w-screen h-screen flex justify-center items-center">
+        <div className="w-screen h-full flex justify-center items-center">
           <img
             src="/vite.svg"
             className="w-20 h-20 ease-in-out infinite animate-bounce"

@@ -51,7 +51,7 @@ const Header = () => {
     }, []);
 
     return (
-        <header className='p-2 bg-gray-900 relative'>
+        <header className='p-2 bg-gray-900 w-full z-[998] text-white fixed'>
             <div className='w-full max-w-2xl mx-auto'>
                 <nav className={`flex items-center ${!authStatus ? 'justify-center' : 'justify-between'}`}>
                     <div className="mr-4">
@@ -81,7 +81,7 @@ const Header = () => {
                                     <LogoutBtn classname='rounded-xl' />
                                 </li>
                             </ul>
-                            <ul className={`mobile navList z-[100] w-100 flex sm:hidden flex-col absolute h-auto top-16 right-0 p-2 duration-200 ${showNavList ? "" : 'transform translate-x-[100%] p-0'} overflow-hidden bg-gray-900 rounded-l-xl`}>
+                            <ul className={`mobile navList bg-gray-900 w-100 flex sm:hidden flex-col absolute top-14 overflow-hidden right-0 transition-all duration-300 p-0 ${showNavList ? "max-h-[600px] p-2" : 'max-h-0'}`}>
                                 {navItems.map((item) =>
                                     item.active ? (
                                         <li key={item.name}>
