@@ -65,6 +65,14 @@ const router = createBrowserRouter([
           </Protected>
         )
       },
+      {
+        path:"*",
+        element:(
+          <div className='flex justify-center items-center h-full w-full'>
+            <h1 className='text-6xl font-bold'>Page Not Found</h1>
+          </div>
+        )
+      }
     ]
   }
 ]);
