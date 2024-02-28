@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import appwriteServcie from '../appwrite/config'
 import { Button, Loading } from '../components'
-// import parse from 'html-react-parser'
 import { useDispatch, useSelector } from 'react-redux'
 import { showAlert } from '../store/alertSlice'
 import Container from '../components/container/Container'
@@ -54,12 +53,11 @@ const Post = () => {
       appwriteServcie.getPost(postId).then((post) => {
         if (post) {
           setpost(post);
-          console.log("Post ; ", post)
         }
         else {
           navigate('/all-posts');
         }
-      })
+      });
     }
   }, [postId])
 

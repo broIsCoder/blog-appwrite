@@ -1,7 +1,6 @@
 import conf from "../conf";
 import { Client, Databases, Storage, Query, ID } from "appwrite";
 import { showInfoAlert } from "../store/infoAlertSlice";
-import { useDispatch } from "react-redux";
 
 export class Service {
   client = new Client();
@@ -13,7 +12,7 @@ export class Service {
     this.dispatch = dispatch;
     this.client
       .setEndpoint(conf.appwrite_Url)
-      .setProject(conf.appwrite_ProjectId);
+      .setProject(conf.appwrite_ProjectId)
 
     this.databases = new Databases(this.client);
     this.bucket = new Storage(this.client);
@@ -34,10 +33,10 @@ export class Service {
       console.error("Appwrite service :: getPost() :: ", error);
       this.dispatch(
         showInfoAlert({
-          message:error.message,
+          message: error.message,
         })
       );
-      return false ;
+      return false;
     }
   }
 
@@ -46,37 +45,18 @@ export class Service {
     try {
       return await this.databases.listDocuments(
         conf.appwrite_DatabaseId,
-        conf.appwrite_CollectionId,
+        conf.appwrite_CollectionId
       );
     } catch (error) {
       console.error("Appwrite service :: getPosts() :: ", error);
       this.dispatch(
         showInfoAlert({
-          message:error.message,
+          message: error.message,
         })
       );
       return false;
     }
-  }
-
-  // get documents(posts) of active status
-  // async getPosts(queries = [Query.equal("status", "active")]) {
-  //   try {
-  //     return await this.databases.listDocuments(
-  //       conf.appwrite_DatabaseId,
-  //       conf.appwrite_CollectionId,
-  //       queries
-  //     );
-  //   } catch (error) {
-  //     console.log("Appwrite service :: getPosts() :: ", error);
-  //     this.dispatch(
-  //       showInfoAlert({
-  //         message:error.message,
-  //       })
-  //     );
-  //     return false;
-  //   }
-  // }
+  };
 
   //create a blog post
   async createPost({ title, content, featuredImage, status, userId }) {
@@ -97,7 +77,7 @@ export class Service {
       console.error("Appwrite service :: createPost() :: ", error);
       this.dispatch(
         showInfoAlert({
-          message:error.message,
+          message: error.message,
         })
       );
       return false;
@@ -122,7 +102,7 @@ export class Service {
       console.error("Appwrite service :: updatePost() :: ", error);
       this.dispatch(
         showInfoAlert({
-          message:error.message,
+          message: error.message,
         })
       );
       return false;
@@ -130,7 +110,7 @@ export class Service {
   }
 
   //delete a blog post
-  async deletePost( postId ) {
+  async deletePost(postId) {
     try {
       await this.databases.deleteDocument(
         conf.appwrite_DatabaseId,
@@ -142,7 +122,7 @@ export class Service {
       console.error("Appwrite service :: deletePost() :: ", error);
       this.dispatch(
         showInfoAlert({
-          message:error.message,
+          message: error.message,
         })
       );
       return false;
@@ -151,7 +131,7 @@ export class Service {
 
   //Storage service for storing images
   //upload featuredImage
-  
+
   async uploadFile(file) {
     try {
       return await this.bucket.createFile(
@@ -163,7 +143,7 @@ export class Service {
       console.error("Storage service :: uploadFile() :: ", error);
       this.dispatch(
         showInfoAlert({
-          message:error.message,
+          message: error.message,
         })
       );
       return false;
@@ -178,7 +158,7 @@ export class Service {
       console.error("Storage service :: deleteFile() :: ", error);
       this.dispatch(
         showInfoAlert({
-          message:error.message,
+          message: error.message,
         })
       );
       return false;
@@ -191,7 +171,7 @@ export class Service {
       return this.bucket.getFilePreview(conf.appwrite_BucketId, fileId).href;
     } catch (error) {
       console.error("Storage service :: getFilePreview() :: ", error);
-      return false ;
+      return false;
     }
   }
 }
@@ -200,4 +180,3 @@ export class Service {
 // const appwriteService = new Service(dispatch);
 const appwriteService = new Service();
 export default appwriteService;
-

@@ -1,7 +1,6 @@
 import conf from "../conf";
 import { Client, Account, ID } from "appwrite";
 import { showInfoAlert } from "../store/infoAlertSlice";
-
 export class AuthService {
   client = new Client();
   account;
