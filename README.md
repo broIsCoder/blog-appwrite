@@ -7,7 +7,7 @@ This blog application allows you to upload blog posts with a cover image. You ca
 ## How to Get Started:
 
 1. **Visit the Website**:  
-   Go to [your-website-url.com](http://your-website-url.com)
+   Go to [Blog Appwrite](https://blog-app-murex-five.vercel.app/)
 
 2. **Sign Up**:  
    Create a new account using your email and credentials.
@@ -26,3 +26,4 @@ This blog application allows you to upload blog posts with a cover image. You ca
 ## Tech Stack
 
 This website is built with **React.js** for the frontend and powered by **Appwrite** for the backend.
+
